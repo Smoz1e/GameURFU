@@ -1,4 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/Icon.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/Icon.xnb","TextureProcessor","Texture2DContent",110773,4194389,3,8447907
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/playerTest.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/playerTest.xnb","TextureProcessor","Texture2DContent",19905,1162885,0,0358119
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/testFon.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/testFon.xnb","TextureProcessor","Texture2DContent",125124,1536085,0,0735295
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/bot.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/bot.xnb","TextureProcessor","Texture2DContent",121241,1048661,0,4731733
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/startButton.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/startButton.xnb","TextureProcessor","Texture2DContent",5709,59221,0,018857

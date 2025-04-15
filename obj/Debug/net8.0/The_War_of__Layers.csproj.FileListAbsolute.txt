@@ -26,3 +26,9 @@ C:\Users\ib258\Desktop\The_War_of__Layers\obj\Debug\net8.0\ref\The_War_of__Layer
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\testFon.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Icon.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\playerTest.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\mordred_.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\menuBackground.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\startButton.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\settingsButton.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\exitButton.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\bot.xnb
