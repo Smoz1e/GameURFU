@@ -10,9 +10,9 @@ namespace The_War_of__Layers
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private PlayerController _playerController; // Используем PlayerController
-        private PlayerModel _playerModel; // Используем PlayerModel
-        private PlayerView _playerView; // Используем PlayerView
+        private PlayerController _playerController;
+        private PlayerModel _playerModel;
+        private PlayerView _playerView;
 
         private Texture2D _introImage;
         private Texture2D _backgroundTexture;
@@ -30,8 +30,9 @@ namespace The_War_of__Layers
         private float _introTimer = 0f;
         private const float IntroDuration = 3f;
 
-        private List<Bot> _bots;
-        private Texture2D _botTexture;
+        private List<BotController> _botControllers; // Список контроллеров ботов
+        private List<BotModel> _botModels; // Список моделей ботов
+        private BotView _botView; // Общий вид для всех ботов
 
         private const float SpaceBetweenBots = 100f;
 
@@ -67,7 +68,7 @@ namespace The_War_of__Layers
             _settingsButtonTexture = Content.Load<Texture2D>("settingsButton");
             _exitButtonTexture = Content.Load<Texture2D>("exitButton");
 
-            _botTexture = Content.Load<Texture2D>("bot");
+            var botTexture = Content.Load<Texture2D>("bot");
 
             // Создаем модель, вид и контроллер игрока
             var playerTexture = Content.Load<Texture2D>("playerTest");
@@ -77,12 +78,19 @@ namespace The_War_of__Layers
             _playerController = new PlayerController(_playerModel, _playerView);
 
             // Создаем список ботов
-            _bots = new List<Bot>
+            _botModels = new List<BotModel>
             {
-                new Bot(_botTexture, new Vector2(100, 100)),
-                new Bot(_botTexture, new Vector2(500, 200)),
-                new Bot(_botTexture, new Vector2(800, 500))
+                new BotModel(new Vector2(100, 100)),
+                new BotModel(new Vector2(500, 200)),
+                new BotModel(new Vector2(800, 500))
             };
+
+            _botView = new BotView(botTexture);
+            _botControllers = new List<BotController>();
+            foreach (var botModel in _botModels)
+            {
+                _botControllers.Add(new BotController(botModel));
+            }
 
             int buttonWidth = 200;
             int buttonHeight = 125;
@@ -155,10 +163,10 @@ namespace The_War_of__Layers
             {
                 _playerController.Update(gameTime, _graphics);
 
-                for (int i = _bots.Count - 1; i >= 0; i--)
+                for (int i = _botControllers.Count - 1; i >= 0; i--)
                 {
-                    var bot = _bots[i];
-                    bot.Update(gameTime, _playerModel.Position, _bots.ToArray(), SpaceBetweenBots);
+                    var botController = _botControllers[i];
+                    botController.Update(gameTime, _playerModel.Position, _botModels.ToArray(), SpaceBetweenBots);
 
                     // Проверка столкновения игрока с ботом
                     Rectangle playerRect = new Rectangle(
@@ -169,8 +177,8 @@ namespace The_War_of__Layers
                     );
 
                     Rectangle botRect = new Rectangle(
-                        (int)(bot.Position.X - 50),
-                        (int)(bot.Position.Y - 50),
+                        (int)(_botModels[i].Position.X - 50),
+                        (int)(_botModels[i].Position.Y - 50),
                         100,
                         100
                     );
@@ -194,7 +202,8 @@ namespace The_War_of__Layers
                         if (bulletRect.Intersects(botRect))
                         {
                             // Удаляем бота и пулю
-                            _bots.RemoveAt(i);
+                            _botControllers.RemoveAt(i);
+                            _botModels.RemoveAt(i);
                             _playerModel.Bullets.RemoveAt(j);
                             break;
                         }
@@ -231,9 +240,9 @@ namespace The_War_of__Layers
             {
                 _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight), Color.White);
 
-                foreach (var bot in _bots)
+                foreach (var botModel in _botModels)
                 {
-                    bot.Draw(_spriteBatch, 100f, 100f);
+                    _botView.Draw(_spriteBatch, botModel, 100f, 100f);
                 }
 
                 _playerController.Draw(_spriteBatch);
