@@ -1,11 +1,14 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 public class Bot
 {
     public Vector2 Position { get; set; }
-    public float Speed { get; set; } = 20f; // Скорость бота
+    public float Speed { get; set; } = 100f; // Скорость бота
     private Texture2D _texture;
+    private Vector2 _direction = Vector2.Zero; // Направление движения
+    private float _rotation = 0f; // Угол поворота спрайта
 
     public Bot(Texture2D texture, Vector2 startPosition)
     {
@@ -13,22 +16,45 @@ public class Bot
         Position = startPosition;
     }
 
-    public void Update(GameTime gameTime, Vector2 playerPosition)
+    public void Update(GameTime gameTime, Vector2 playerPosition, Bot[] otherBots, float spaceBetweenBots)
     {
         // Рассчитываем направление к игроку
-        Vector2 direction = playerPosition - Position;
-        if (direction.Length() > 0)
+        Vector2 newDirection = playerPosition - Position;
+        if (newDirection.Length() > 0)
         {
-            direction.Normalize();
+            newDirection.Normalize();
         }
 
-        // Обновляем позицию бота
-        Position += direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-    }
+        // Проверяем пересечение с другими ботами
+        foreach (var bot in otherBots)
+        {
+            if (bot != this && Vector2.Distance(Position, bot.Position) < spaceBetweenBots)
+            {
+                // Отталкиваем бота в противоположную сторону
+                Vector2 avoidDirection = Position - bot.Position;
+                if (avoidDirection.Length() > 0)
+                {
+                    avoidDirection.Normalize();
+                }
+                newDirection += avoidDirection;
 
-    public void Draw(SpriteBatch spriteBatch)
-    {
-        spriteBatch.Draw(_texture, Position, Color.White);
+                // Корректируем позицию для предотвращения наложения
+                Position += avoidDirection * (spaceBetweenBots - Vector2.Distance(Position, bot.Position));
+            }
+        }
+
+        if (newDirection.Length() > 0)
+        {
+            newDirection.Normalize();
+        }
+
+        _direction = newDirection;
+
+        // Обновляем позицию бота
+        Position += _direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+        // Рассчитываем угол поворота
+        _rotation = (float)Math.Atan2(_direction.Y, _direction.X);
     }
 
     public void Draw(SpriteBatch spriteBatch, float desiredWidth, float desiredHeight)
@@ -41,9 +67,9 @@ public class Bot
             Position,
             new Rectangle(0, 0, sourceWidth, sourceHeight), // область текстуры для отрисовки
             Color.White,
-            0f,
-            new Vector2(sourceWidth / 2, sourceHeight / 2), // точка вращения (центр)
-            new Vector2(desiredWidth / sourceWidth, desiredHeight / sourceHeight), // масштаб
+            _rotation, // Угол поворота
+            new Vector2(sourceWidth / 2, sourceHeight / 2), // Точка вращения (центр)
+            new Vector2(desiredWidth / sourceWidth, desiredHeight / sourceHeight), // Масштаб
             SpriteEffects.None,
             0f
         );

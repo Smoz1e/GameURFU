@@ -32,3 +32,5 @@ C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\startButton.x
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\settingsButton.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\exitButton.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\bot.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\obj\Debug\net8.0\The_War_of__Layers.sourcelink.json
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\bullet.xnb

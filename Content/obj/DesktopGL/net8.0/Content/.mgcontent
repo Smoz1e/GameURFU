@@ -5,6 +5,7 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/bot.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/bullet.png</File>
     <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/exitButton.png</File>
     <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/Icon.jpg</File>
     <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/menuBackground.png</File>
@@ -14,6 +15,7 @@
     <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/testFon.jpg</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
