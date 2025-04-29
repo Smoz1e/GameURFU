@@ -10,7 +10,9 @@ namespace The_War_of__Layers
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        private Player _player; // Добавляем объект игрока
+        private PlayerController _playerController; // Используем PlayerController
+        private PlayerModel _playerModel; // Используем PlayerModel
+        private PlayerView _playerView; // Используем PlayerView
 
         private Texture2D _introImage;
         private Texture2D _backgroundTexture;
@@ -67,10 +69,12 @@ namespace The_War_of__Layers
 
             _botTexture = Content.Load<Texture2D>("bot");
 
-            // Создаем игрока
+            // Создаем модель, вид и контроллер игрока
             var playerTexture = Content.Load<Texture2D>("playerTest");
-            var bulletTexture = Content.Load<Texture2D>("bullet"); // Загрузка текстуры пули
-            _player = new Player(playerTexture, new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f, 100f, 100f, bulletTexture);
+            var bulletTexture = Content.Load<Texture2D>("bullet");
+            _playerModel = new PlayerModel(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f);
+            _playerView = new PlayerView(playerTexture, 100f, 100f, bulletTexture);
+            _playerController = new PlayerController(_playerModel, _playerView);
 
             // Создаем список ботов
             _bots = new List<Bot>
@@ -149,17 +153,17 @@ namespace The_War_of__Layers
             }
             else if (_currentState == GameState.Playing)
             {
-                _player.Update(gameTime, _graphics);
+                _playerController.Update(gameTime, _graphics);
 
                 for (int i = _bots.Count - 1; i >= 0; i--)
                 {
                     var bot = _bots[i];
-                    bot.Update(gameTime, _player.Position, _bots.ToArray(), SpaceBetweenBots);
+                    bot.Update(gameTime, _playerModel.Position, _bots.ToArray(), SpaceBetweenBots);
 
                     // Проверка столкновения игрока с ботом
                     Rectangle playerRect = new Rectangle(
-                        (int)(_player.Position.X - 50),
-                        (int)(_player.Position.Y - 50),
+                        (int)(_playerModel.Position.X - 50),
+                        (int)(_playerModel.Position.Y - 50),
                         100,
                         100
                     );
@@ -177,9 +181,9 @@ namespace The_War_of__Layers
                     }
 
                     // Проверка столкновения пуль с ботами
-                    for (int j = _player.Bullets.Count - 1; j >= 0; j--)
+                    for (int j = _playerModel.Bullets.Count - 1; j >= 0; j--)
                     {
-                        var bullet = _player.Bullets[j];
+                        var bullet = _playerModel.Bullets[j];
                         Rectangle bulletRect = new Rectangle(
                             (int)(bullet.Position.X - 7.5f), // Половина ширины пули
                             (int)(bullet.Position.Y - 7.5f), // Половина высоты пули
@@ -191,7 +195,7 @@ namespace The_War_of__Layers
                         {
                             // Удаляем бота и пулю
                             _bots.RemoveAt(i);
-                            _player.Bullets.RemoveAt(j);
+                            _playerModel.Bullets.RemoveAt(j);
                             break;
                         }
                     }
@@ -232,7 +236,7 @@ namespace The_War_of__Layers
                     bot.Draw(_spriteBatch, 100f, 100f);
                 }
 
-                _player.Draw(_spriteBatch);
+                _playerController.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
