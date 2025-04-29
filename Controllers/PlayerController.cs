@@ -52,22 +52,11 @@ public class PlayerController
                 bulletDirection.Normalize();
             }
 
-            // Удаляем старую пулю, если она существует
-            if (_model.Bullets.Count > 0)
-            {
-                _model.Bullets.Clear();
-            }
+            var bulletModel = new BulletModel(_model.Position, bulletDirection, 500f);
+            var bulletView = new BulletView(_view._bulletTexture, 16, 16, 0.1f);
+            var bulletController = new BulletController(bulletModel, bulletView);
 
-            // Создаем новую пулю
-            _model.Bullets.Add(new Bullet(
-                _view._bulletTexture,
-                _model.Position,
-                bulletDirection,
-                500f,
-                16,
-                16,
-                0.1f
-            ));
+            _model.Bullets.Add(bulletController);
         }
 
         // Обновление пуль
@@ -75,8 +64,7 @@ public class PlayerController
         {
             _model.Bullets[i].Update(gameTime);
 
-            if (_model.Bullets[i].Position.X < 0 || _model.Bullets[i].Position.X > graphics.PreferredBackBufferWidth ||
-                _model.Bullets[i].Position.Y < 0 || _model.Bullets[i].Position.Y > graphics.PreferredBackBufferHeight)
+            if (_model.Bullets[i].IsOutOfBounds(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight))
             {
                 _model.Bullets.RemoveAt(i);
             }
@@ -97,5 +85,10 @@ public class PlayerController
     public void Draw(SpriteBatch spriteBatch)
     {
         _view.Draw(spriteBatch, _model);
+
+        foreach (var bullet in _model.Bullets)
+        {
+            bullet.Draw(spriteBatch);
+        }
     }
 }
