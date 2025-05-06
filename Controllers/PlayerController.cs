@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 public class PlayerController
 {
@@ -16,7 +17,7 @@ public class PlayerController
         _previousMouseState = Mouse.GetState();
     }
 
-    public void Update(GameTime gameTime, GraphicsDeviceManager graphics)
+    public void Update(GameTime gameTime, GraphicsDeviceManager graphics, List<Rectangle> obstacles)
     {
         float updatedSpeed = _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         var kstate = Keyboard.GetState();
@@ -29,10 +30,27 @@ public class PlayerController
         if (kstate.IsKeyDown(Keys.Left) || kstate.IsKeyDown(Keys.A)) movement.X -= 1;
         if (kstate.IsKeyDown(Keys.Right) || kstate.IsKeyDown(Keys.D)) movement.X += 1;
 
+        Vector2 oldPosition = _model.Position;
         if (movement != Vector2.Zero)
         {
             movement.Normalize();
             _model.Position += movement * updatedSpeed;
+            // Проверка столкновения с препятствиями (круглый коллайдер)
+            float radius = Math.Min(_view._texture.Width, _view._texture.Height) / 14f;
+            Vector2 center = _model.Position;
+            bool collided = false;
+            foreach (var obstacle in obstacles)
+            {
+                if (CircleIntersectsRectangle(center, radius, obstacle))
+                {
+                    collided = true;
+                    break;
+                }
+            }
+            if (collided)
+            {
+                _model.Position = oldPosition;
+            }
         }
 
         // Ограничение движения игрока в пределах экрана
@@ -80,6 +98,16 @@ public class PlayerController
             MathHelper.Clamp(_model.Position.X, _view._texture.Width / (2 * c), graphics.PreferredBackBufferWidth - _view._texture.Width / (2 * c)),
             MathHelper.Clamp(_model.Position.Y, _view._texture.Height / (2 * c), graphics.PreferredBackBufferHeight - _view._texture.Height / (2 * c))
         );
+    }
+
+    // Проверка пересечения круга и прямоугольника
+    private bool CircleIntersectsRectangle(Vector2 circleCenter, float radius, Rectangle rect)
+    {
+        float closestX = MathHelper.Clamp(circleCenter.X, rect.Left, rect.Right);
+        float closestY = MathHelper.Clamp(circleCenter.Y, rect.Top, rect.Bottom);
+        float dx = circleCenter.X - closestX;
+        float dy = circleCenter.Y - closestY;
+        return (dx * dx + dy * dy) < (radius * radius);
     }
 
     public void Draw(SpriteBatch spriteBatch)

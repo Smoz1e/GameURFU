@@ -15,6 +15,8 @@ public class GameModel
     public List<BotController> BotControllers = new List<BotController>();
     public float SpaceBetweenBots = 100f;
 
+    public List<Rectangle> Obstacles = new List<Rectangle>();
+
     public Texture2D IntroImage;
     public Texture2D BackgroundTexture;
     public Texture2D MenuBackground;
@@ -24,4 +26,6 @@ public class GameModel
     public Rectangle StartButtonRect;
     public Rectangle SettingsButtonRect;
     public Rectangle ExitButtonRect;
+    public Texture2D PixelTexture; // 1x1 пиксель для отрисовки препятствий
+    public SpriteFont DebugFont;
 }

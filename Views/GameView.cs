@@ -24,6 +24,7 @@ public class GameView
         else if (model.CurrentState == GameState.Playing)
         {
             spriteBatch.Draw(model.BackgroundTexture, new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.White);
+            // Препятствия не отрисовываются
             foreach (var botModel in model.BotModels)
             {
                 botView.Draw(spriteBatch, botModel, 100f, 100f);
