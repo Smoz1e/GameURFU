@@ -45,3 +45,4 @@ C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Content\setti
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Content\startButton.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Content\testFon.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\TextMenu.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\GameText.xnb

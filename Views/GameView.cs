@@ -51,16 +51,13 @@ public class GameView
             }
             playerController.Draw(spriteBatch);
 
-            // Отрисовка номера волны без использования шрифта
-            string waveText = $"Волна: {model.CurrentWave}";
-            int x = 40, y = 40;
-            int rectWidth = 200, rectHeight = 40;
-            // Полупрозрачный фон
-            spriteBatch.Draw(model.PixelTexture, new Rectangle(x - 10, y - 10, rectWidth, rectHeight), Color.Black * 0.5f);
-            // "Псевдотекст": рисуем желтые прямоугольники по количеству волны (например, палочки)
-            for (int i = 0; i < model.CurrentWave; i++)
+            // Текстовая отрисовка волны и убитых ботов
+            if (model.GameTextFont != null)
             {
-                spriteBatch.Draw(model.PixelTexture, new Rectangle(x + 10 + i * 20, y + 10, 10, 20), Color.Yellow);
+                string waveText = $"Wave: {model.CurrentWave}";
+                string killedText = $"Bots killed: {model.BotsKilled}";
+                spriteBatch.DrawString(model.GameTextFont, waveText, new Vector2(40, 40), Color.Yellow);
+                spriteBatch.DrawString(model.GameTextFont, killedText, new Vector2(40, 90), Color.Orange);
             }
         }
         spriteBatch.End();

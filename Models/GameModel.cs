@@ -30,6 +30,7 @@ public class GameModel
     public Texture2D PixelTexture; // 1x1 пиксель для отрисовки препятствий
     public SpriteFont DebugFont;
     public SpriteFont TextMenuFont;
+    public SpriteFont GameTextFont;
 
     public int CurrentWave = 1;
     public int BotsInWave = 1;
@@ -39,4 +40,5 @@ public class GameModel
     public int BotsPerWave = 1;
     public float BotSpeedMultiplier = 1f;
     public bool IsSettingsModalOpen = false;
+    public int BotsKilled = 0;
 }

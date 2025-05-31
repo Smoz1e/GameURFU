@@ -35,6 +35,7 @@ public class GameController
         _model.SettingsButtonTexture = Content.Load<Texture2D>("settingsButton");
         _model.ExitButtonTexture = Content.Load<Texture2D>("exitButton");
         _model.TextMenuFont = Content.Load<SpriteFont>("TextMenu");
+        _model.GameTextFont = Content.Load<SpriteFont>("GameText");
         var botTexture = Content.Load<Texture2D>("bot");
         var playerTexture = Content.Load<Texture2D>("playerTest");
         var bulletTexture = Content.Load<Texture2D>("bullet");
@@ -188,6 +189,7 @@ public class GameController
                             _model.BotControllers.RemoveAt(i);
                             _model.BotModels.RemoveAt(i);
                             _model.PlayerModel.Bullets.RemoveAt(j);
+                            _model.BotsKilled++;
                             break;
                         }
                     }
