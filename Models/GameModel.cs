@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
 public enum GameState { Intro, Menu, Playing }
+public enum DifficultyLevel { Easy, Medium, Hard }
 
 public class GameModel
 {
@@ -31,4 +32,10 @@ public class GameModel
 
     public int CurrentWave = 1;
     public int BotsInWave = 1;
+
+    public DifficultyLevel SelectedDifficulty = DifficultyLevel.Easy;
+    public int BotsStartCount = 1;
+    public int BotsPerWave = 1;
+    public float BotSpeedMultiplier = 1f;
+    public bool IsSettingsModalOpen = false;
 }

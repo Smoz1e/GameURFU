@@ -127,17 +127,31 @@ public class GameController
                 bool isSettingsHovered = _model.SettingsButtonRect.Contains(currentMouseState.Position);
                 bool isExitHovered = _model.ExitButtonRect.Contains(currentMouseState.Position);
 
-                if (isStartHovered && currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                if (_model.IsSettingsModalOpen)
                 {
-                    _model.CurrentState = GameState.Playing;
+                    // Обработка кликов по модальному окну выбора сложности
+                    HandleDifficultyModalClick(currentMouseState);
                 }
-                else if (isExitHovered && currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                else
                 {
-                    System.Environment.Exit(0);
-                }
-                if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.Buttons.Start == ButtonState.Pressed)
-                {
-                    _model.CurrentState = GameState.Playing;
+                    if (isStartHovered && currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                    {
+                        ResetGameState();
+                        _model.CurrentState = GameState.Playing;
+                    }
+                    else if (isSettingsHovered && currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                    {
+                        _model.IsSettingsModalOpen = true;
+                    }
+                    else if (isExitHovered && currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+                    {
+                        System.Environment.Exit(0);
+                    }
+                    if (keyboardState.IsKeyDown(Keys.Enter) || gamePadState.Buttons.Start == ButtonState.Pressed)
+                    {
+                        ResetGameState();
+                        _model.CurrentState = GameState.Playing;
+                    }
                 }
                 break;
             case GameState.Playing:
@@ -158,7 +172,7 @@ public class GameController
                         100, 100);
                     if (playerRect.Intersects(botRect))
                     {
-                        System.Environment.Exit(0);
+                        _model.CurrentState = GameState.Menu;
                     }
                     // Проверка столкновения пуль с ботами
                     for (int j = _model.PlayerModel.Bullets.Count - 1; j >= 0; j--)
@@ -207,7 +221,15 @@ public class GameController
     {
         _model.BotModels.Clear();
         _model.BotControllers.Clear();
-        for (int b = 0; b < count; b++)
+        int botsToSpawn = _model.BotsStartCount + (_model.CurrentWave - 1) * _model.BotsPerWave;
+        float speedMultiplier = 1f + (_model.CurrentWave - 1) * (_model.BotSpeedMultiplier - 1f) / 5f;
+        if (_model.SelectedDifficulty == DifficultyLevel.Easy)
+            speedMultiplier = 1f;
+        else if (_model.SelectedDifficulty == DifficultyLevel.Medium)
+            speedMultiplier = 1f + (_model.CurrentWave - 1) * 0.3f;
+        else if (_model.SelectedDifficulty == DifficultyLevel.Hard)
+            speedMultiplier = 1f + (_model.CurrentWave - 1) * 0.6f;
+        for (int b = 0; b < botsToSpawn; b++)
         {
             Vector2 pos;
             bool valid;
@@ -243,7 +265,6 @@ public class GameController
                             break;
                         }
                     }
-                    // Проверка на минимальное расстояние до игрока
                     int minBotDistanceToPlayer = 400; 
                     if (Vector2.Distance(pos, _model.PlayerModel.Position) < minBotDistanceToPlayer)
                     {
@@ -252,8 +273,81 @@ public class GameController
                 }
                 attempts++;
             } while (!valid && attempts < 100);
-            _model.BotModels.Add(new BotModel(pos));
-            _model.BotControllers.Add(new BotController(_model.BotModels[^1]));
+            var bot = new BotModel(pos);
+            bot.Speed *= speedMultiplier;
+            _model.BotModels.Add(bot);
+            _model.BotControllers.Add(new BotController(bot));
         }
+    }
+
+    // Обработка клика по модальному окну выбора сложности
+    private void HandleDifficultyModalClick(MouseState mouseState)
+    {
+        int modalWidth = 500;
+        int modalHeight = 350;
+        int x = (_graphics.PreferredBackBufferWidth - modalWidth) / 2;
+        int y = (_graphics.PreferredBackBufferHeight - modalHeight) / 2;
+        int buttonWidth = 400;
+        int buttonHeight = 70;
+        int spacing = 20;
+        Rectangle easyRect = new Rectangle(x + 50, y + 60, buttonWidth, buttonHeight);
+        Rectangle mediumRect = new Rectangle(x + 50, y + 60 + buttonHeight + spacing, buttonWidth, buttonHeight);
+        Rectangle hardRect = new Rectangle(x + 50, y + 60 + 2 * (buttonHeight + spacing), buttonWidth, buttonHeight);
+        if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+        {
+            if (easyRect.Contains(mouseState.Position))
+            {
+                _model.SelectedDifficulty = DifficultyLevel.Easy;
+                _model.IsSettingsModalOpen = false;
+            }
+            else if (mediumRect.Contains(mouseState.Position))
+            {
+                _model.SelectedDifficulty = DifficultyLevel.Medium;
+                _model.IsSettingsModalOpen = false;
+            }
+            else if (hardRect.Contains(mouseState.Position))
+            {
+                _model.SelectedDifficulty = DifficultyLevel.Hard;
+                _model.IsSettingsModalOpen = false;
+            }
+        }
+    }
+
+    private void SetDifficultyParams()
+    {
+        switch (_model.SelectedDifficulty)
+        {
+            case DifficultyLevel.Easy:
+                _model.BotsStartCount = 1;
+                _model.BotsPerWave = 1;
+                _model.BotSpeedMultiplier = 1f;
+                break;
+            case DifficultyLevel.Medium:
+                _model.BotsStartCount = 3;
+                _model.BotsPerWave = 2;
+                _model.BotSpeedMultiplier = 1.5f;
+                break;
+            case DifficultyLevel.Hard:
+                _model.BotsStartCount = 5;
+                _model.BotsPerWave = 3;
+                _model.BotSpeedMultiplier = 2.2f;
+                break;
+        }
+    }
+
+    // Сброс состояния игры при старте новой игры
+    private void ResetGameState()
+    {
+        SetDifficultyParams();
+        _model.CurrentWave = 1;
+        _model.BotsInWave = 1;
+        // Сброс игрока
+        _model.PlayerModel.Position = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
+        _model.PlayerModel.Rotation = 0f;
+        _model.PlayerModel.Bullets.Clear();
+        // Сброс ботов
+        _model.BotModels.Clear();
+        _model.BotControllers.Clear();
+        SpawnBotWave(_model.BotsInWave);
     }
 }

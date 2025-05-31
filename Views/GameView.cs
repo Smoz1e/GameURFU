@@ -21,6 +21,11 @@ public class GameView
             spriteBatch.Draw(model.StartButtonTexture, model.StartButtonRect, startButtonColor);
             spriteBatch.Draw(model.SettingsButtonTexture, model.SettingsButtonRect, settingsButtonColor);
             spriteBatch.Draw(model.ExitButtonTexture, model.ExitButtonRect, exitButtonColor);
+
+            if (model.IsSettingsModalOpen)
+            {
+                DrawDifficultyModal(spriteBatch, model);
+            }
         }
         else if (model.CurrentState == GameState.Playing)
         {
@@ -84,5 +89,33 @@ public class GameView
         Vector2 edge = end - start;
         float angle = (float)Math.Atan2(edge.Y, edge.X);
         spriteBatch.Draw(texture, new Rectangle((int)start.X, (int)start.Y, (int)edge.Length(), 2), null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
+    }
+
+    // Модальное окно выбора сложности
+    private void DrawDifficultyModal(SpriteBatch spriteBatch, GameModel model)
+    {
+        int modalWidth = 500;
+        int modalHeight = 350;
+        int x = (spriteBatch.GraphicsDevice.Viewport.Width - modalWidth) / 2;
+        int y = (spriteBatch.GraphicsDevice.Viewport.Height - modalHeight) / 2;
+        // Полупрозрачный фон
+        spriteBatch.Draw(model.PixelTexture, new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
+        // Белое окно
+        spriteBatch.Draw(model.PixelTexture, new Rectangle(x, y, modalWidth, modalHeight), Color.White);
+        // Кнопки
+        int buttonWidth = 400;
+        int buttonHeight = 70;
+        int spacing = 20;
+        Rectangle easyRect = new Rectangle(x + 50, y + 60, buttonWidth, buttonHeight);
+        Rectangle mediumRect = new Rectangle(x + 50, y + 60 + buttonHeight + spacing, buttonWidth, buttonHeight);
+        Rectangle hardRect = new Rectangle(x + 50, y + 60 + 2 * (buttonHeight + spacing), buttonWidth, buttonHeight);
+        Color easyColor = model.SelectedDifficulty == DifficultyLevel.Easy ? Color.LightGreen : Color.LightGray;
+        Color mediumColor = model.SelectedDifficulty == DifficultyLevel.Medium ? Color.Orange : Color.LightGray;
+        Color hardColor = model.SelectedDifficulty == DifficultyLevel.Hard ? Color.Red : Color.LightGray;
+        spriteBatch.Draw(model.PixelTexture, easyRect, easyColor);
+        spriteBatch.Draw(model.PixelTexture, mediumRect, mediumColor);
+        spriteBatch.Draw(model.PixelTexture, hardRect, hardColor);
+        // Текст (можно заменить на отрисовку псевдотекста или добавить SpriteFont)
+        // Здесь для простоты просто прямоугольники разного цвета
     }
 }
