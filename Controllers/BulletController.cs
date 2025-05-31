@@ -17,7 +17,7 @@ public class BulletController
         // Обновляем позицию пули
         _model.Position += _model.Direction * _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-        // Обновляем анимацию
+
         _view.UpdateAnimation(gameTime);
     }
 

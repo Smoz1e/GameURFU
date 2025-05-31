@@ -28,4 +28,7 @@ public class GameModel
     public Rectangle ExitButtonRect;
     public Texture2D PixelTexture; // 1x1 пиксель для отрисовки препятствий
     public SpriteFont DebugFont;
+
+    public int CurrentWave = 1;
+    public int BotsInWave = 1;
 }

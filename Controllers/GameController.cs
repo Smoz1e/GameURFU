@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System;
 
 public class GameController
 {
@@ -38,19 +39,10 @@ public class GameController
         var bulletTexture = Content.Load<Texture2D>("bullet");
         _model.PlayerModel = new PlayerModel(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f);
         var playerView = new PlayerView(playerTexture, 100f, 100f, bulletTexture);
-        _playerController = new PlayerController(_model.PlayerModel, playerView);
-        _model.BotModels = new List<BotModel>
-        {
-            new BotModel(new Vector2(100, 100)),
-            new BotModel(new Vector2(500, 200)),
-            new BotModel(new Vector2(800, 500))
-        };
+        _playerController = new PlayerController(_model.PlayerModel, playerView);        _model.BotModels = new List<BotModel>();
         _botView = new BotView(botTexture);
         _model.BotControllers = new List<BotController>();
-        foreach (var botModel in _model.BotModels)
-        {
-            _model.BotControllers.Add(new BotController(botModel));
-        }
+        SpawnBotWave(_model.BotsInWave);
         int buttonWidth = 200;
         int buttonHeight = 125;
         _model.StartButtonRect = new Rectangle(
@@ -96,6 +88,19 @@ public class GameController
         _model.Obstacles.Add(new Rectangle(1700, 920, 100, 500));
         _model.Obstacles.Add(new Rectangle(1600, 1100, 100, 500));
         _model.Obstacles.Add(new Rectangle(1550, 1300, 50, 500));
+
+       // Куст
+       _model.Obstacles.Add(new Rectangle(1500, 970, 50, 50));
+    }
+
+    // Проверка пересечения круга и прямоугольника
+    private bool CircleIntersectsRectangle(Vector2 circleCenter, float radius, Rectangle rect)
+    {
+        float closestX = MathHelper.Clamp(circleCenter.X, rect.Left, rect.Right);
+        float closestY = MathHelper.Clamp(circleCenter.Y, rect.Top, rect.Bottom);
+        float dx = circleCenter.X - closestX;
+        float dy = circleCenter.Y - closestY;
+        return (dx * dx + dy * dy) < (radius * radius);
     }
 
     public void Update(GameTime gameTime)
@@ -140,7 +145,7 @@ public class GameController
                 for (int i = _model.BotControllers.Count - 1; i >= 0; i--)
                 {
                     var botController = _model.BotControllers[i];
-                    botController.Update(gameTime, _model.PlayerModel.Position, _model.BotModels.ToArray(), _model.SpaceBetweenBots);
+                    botController.Update(gameTime, _model.PlayerModel.Position, _model.BotModels.ToArray(), _model.SpaceBetweenBots, _model.Obstacles);
 
                     // Проверка столкновения игрока с ботом
                     Rectangle playerRect = new Rectangle(
@@ -172,6 +177,13 @@ public class GameController
                         }
                     }
                 }
+                // Проверка на новую волну
+                if (_model.BotControllers.Count == 0)
+                {
+                    _model.CurrentWave++;
+                    _model.BotsInWave++;
+                    SpawnBotWave(_model.BotsInWave);
+                }
                 if (keyboardState.IsKeyDown(Keys.Escape))
                 {
                     _model.CurrentState = GameState.Menu;
@@ -184,5 +196,64 @@ public class GameController
     public void Draw(SpriteBatch spriteBatch)
     {
         _view.Draw(spriteBatch, _model, _playerController, _botView);
+    }
+
+    private Random _rnd = new Random();
+
+    private int botRadius = 50;
+    private int minBotDistanceToObstacle = 100;
+
+    private void SpawnBotWave(int count)
+    {
+        _model.BotModels.Clear();
+        _model.BotControllers.Clear();
+        for (int b = 0; b < count; b++)
+        {
+            Vector2 pos;
+            bool valid;
+            int attempts = 0;
+            do
+            {
+                pos = new Vector2(
+                    _rnd.Next(botRadius, _graphics.PreferredBackBufferWidth - botRadius),
+                    _rnd.Next(botRadius, _graphics.PreferredBackBufferHeight - botRadius)
+                );
+                valid = true;
+                foreach (var obs in _model.Obstacles)
+                {
+                    Rectangle expanded = new Rectangle(
+                        obs.X - minBotDistanceToObstacle - botRadius,
+                        obs.Y - minBotDistanceToObstacle - botRadius,
+                        obs.Width + 2 * (minBotDistanceToObstacle + botRadius),
+                        obs.Height + 2 * (minBotDistanceToObstacle + botRadius)
+                    );
+                    if (CircleIntersectsRectangle(pos, 1, expanded))
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (valid)
+                {
+                    foreach (var other in _model.BotModels)
+                    {
+                        if (Vector2.Distance(pos, other.Position) < botRadius * 2)
+                        {
+                            valid = false;
+                            break;
+                        }
+                    }
+                    // Проверка на минимальное расстояние до игрока
+                    int minBotDistanceToPlayer = 400; 
+                    if (Vector2.Distance(pos, _model.PlayerModel.Position) < minBotDistanceToPlayer)
+                    {
+                        valid = false;
+                    }
+                }
+                attempts++;
+            } while (!valid && attempts < 100);
+            _model.BotModels.Add(new BotModel(pos));
+            _model.BotControllers.Add(new BotController(_model.BotModels[^1]));
+        }
     }
 }
