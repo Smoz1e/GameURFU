@@ -13,6 +13,8 @@ public class PlayerModel
     public float ReloadTimer = 0f;
     public const int MaxShotsBeforeReload = 25;
     public const float ReloadDuration = 2.5f;
+    public int Magazines = 4;
+    public const int MaxMagazines = 7;
 
     public PlayerModel(Vector2 startPosition, float speed)
     {

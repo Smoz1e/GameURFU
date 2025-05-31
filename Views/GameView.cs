@@ -51,6 +51,13 @@ public class GameView
             }
             playerController.Draw(spriteBatch);
 
+            // Отрисовка боеприпасов
+            foreach (var ammo in model.AmmunitionControllers)
+            {
+                if (ammo != null && ammo.View != null)
+                    ammo.Draw(spriteBatch);
+            }
+
             // Текстовая отрисовка волны и убитых ботов
             if (model.GameTextFont != null)
             {
@@ -62,6 +69,9 @@ public class GameView
                 int ammoLeft = PlayerModel.MaxShotsBeforeReload - model.PlayerModel.ShotsFired;
                 string ammoText = $"Патроны: {ammoLeft}";
                 spriteBatch.DrawString(model.GameTextFont, ammoText, new Vector2(40, 140), Color.White);
+                // Отображение количества магазинов
+                string magText = $"Магазины: {model.PlayerModel.Magazines}";
+                spriteBatch.DrawString(model.GameTextFont, magText, new Vector2(40, 180), Color.LightBlue);
                 // Надпись по центру экрана при перезарядке
                 if (model.PlayerModel.IsReloading)
                 {

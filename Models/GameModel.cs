@@ -14,6 +14,7 @@ public class GameModel
     public PlayerModel PlayerModel;
     public List<BotModel> BotModels = new List<BotModel>();
     public List<BotController> BotControllers = new List<BotController>();
+    public List<AmmunitionController> AmmunitionControllers = new List<AmmunitionController>();
     public float SpaceBetweenBots = 100f;
 
     public List<Rectangle> Obstacles = new List<Rectangle>();

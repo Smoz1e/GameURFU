@@ -46,3 +46,4 @@ C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Content\start
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Content\testFon.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\TextMenu.xnb
 C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\GameText.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\Ammunition.xnb

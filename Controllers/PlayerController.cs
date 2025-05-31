@@ -67,9 +67,14 @@ public class PlayerController
             _model.ReloadTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             if (_model.ReloadTimer >= PlayerModel.ReloadDuration)
             {
-                _model.IsReloading = false;
-                _model.ReloadTimer = 0f;
-                _model.ShotsFired = 0;
+                if (_model.Magazines > 0)
+                {
+                    _model.Magazines--;
+                    _model.IsReloading = false;
+                    _model.ReloadTimer = 0f;
+                    _model.ShotsFired = 0;
+                }
+                // Если магазинов нет, игрок остается на перезарядке
             }
         }
 
@@ -90,8 +95,12 @@ public class PlayerController
             _model.ShotsFired++;
             if (_model.ShotsFired >= PlayerModel.MaxShotsBeforeReload)
             {
-                _model.IsReloading = true;
-                _model.ReloadTimer = 0f;
+                if (_model.Magazines > 0)
+                {
+                    _model.IsReloading = true;
+                    _model.ReloadTimer = 0f;
+                }
+                // Если магазинов нет, не перезаряжаем, игрок не может стрелять
             }
         }
 

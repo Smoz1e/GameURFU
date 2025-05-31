@@ -12,6 +12,7 @@ public class GameController
     private BotView _botView;
     private MouseState _previousMouseState;
     private GraphicsDeviceManager _graphics;
+    private AmmunitionView _ammunitionView;
 
     public GameController(GameModel model, GameView view, GraphicsDeviceManager graphics)
     {
@@ -39,6 +40,8 @@ public class GameController
         var botTexture = Content.Load<Texture2D>("bot");
         var playerTexture = Content.Load<Texture2D>("playerTest");
         var bulletTexture = Content.Load<Texture2D>("bullet");
+        var ammunitionTexture = Content.Load<Texture2D>("Ammunition");
+        _ammunitionView = new AmmunitionView(ammunitionTexture, 50f);
         _model.PlayerModel = new PlayerModel(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f);
         var playerView = new PlayerView(playerTexture, 100f, 100f, bulletTexture);
         _playerController = new PlayerController(_model.PlayerModel, playerView);        _model.BotModels = new List<BotModel>();
@@ -158,6 +161,7 @@ public class GameController
                 break;
             case GameState.Playing:
                 _playerController.Update(gameTime, _graphics, _model.Obstacles);
+                CheckAmmunitionPickup();
                 for (int i = _model.BotControllers.Count - 1; i >= 0; i--)
                 {
                     var botController = _model.BotControllers[i];
@@ -186,10 +190,26 @@ public class GameController
                             15, 15);
                         if (bulletRect.Intersects(botRect))
                         {
+                            // Спавн боеприпаса с шансом (1-3 за волну)
+                            TrySpawnAmmunition(_model.BotModels[i].Position);
                             _model.BotControllers.RemoveAt(i);
                             _model.BotModels.RemoveAt(i);
                             _model.PlayerModel.Bullets.RemoveAt(j);
                             _model.BotsKilled++;
+                            // Если это был последний бот в волне, доспавнить недостающие боеприпасы
+                            if (_model.BotControllers.Count == 0 && _ammoSpawnedThisWave < _ammoToSpawnThisWave)
+                            {
+                                int toSpawn = _ammoToSpawnThisWave - _ammoSpawnedThisWave;
+                                for (int k = 0; k < toSpawn; k++)
+                                {
+                                    // Спавним боеприпас в случайной позиции на экране
+                                    Vector2 spawnPos = new Vector2(
+                                        _rnd.Next(60, _graphics.PreferredBackBufferWidth - 60),
+                                        _rnd.Next(60, _graphics.PreferredBackBufferHeight - 60)
+                                    );
+                                    TryForceSpawnAmmunition(spawnPos);
+                                }
+                            }
                             break;
                         }
                     }
@@ -219,11 +239,37 @@ public class GameController
 
     private int botRadius = 50;
     private int minBotDistanceToObstacle = 100;
+    private int _ammoToSpawnThisWave = 0;
+    private int _ammoSpawnedThisWave = 0;
+
+    // Новый метод для форсированного спавна боеприпаса (без проверки лимита)
+    private void TryForceSpawnAmmunition(Vector2 pos)
+    {
+        var ammo = new AmmunitionModel(pos);
+        var controller = new AmmunitionController(ammo, _ammunitionView);
+        _model.AmmunitionControllers.Add(controller);
+        _ammoSpawnedThisWave++;
+    }
+
+    // Исправленный TrySpawnAmmunition (без инициализации лимита)
+    private void TrySpawnAmmunition(Vector2 pos)
+    {
+        if (_ammoSpawnedThisWave < _ammoToSpawnThisWave)
+        {
+            var ammo = new AmmunitionModel(pos);
+            var controller = new AmmunitionController(ammo, _ammunitionView);
+            _model.AmmunitionControllers.Add(controller);
+            _ammoSpawnedThisWave++;
+        }
+    }
 
     private void SpawnBotWave(int count)
     {
         _model.BotModels.Clear();
         _model.BotControllers.Clear();
+        _model.AmmunitionControllers.Clear();
+        _ammoToSpawnThisWave = _rnd.Next(1, 4);
+        _ammoSpawnedThisWave = 0;
         int botsToSpawn = _model.BotsStartCount + (_model.CurrentWave - 1) * _model.BotsPerWave;
         float speedMultiplier = 1f + (_model.CurrentWave - 1) * (_model.BotSpeedMultiplier - 1f) / 5f;
         if (_model.SelectedDifficulty == DifficultyLevel.Easy)
@@ -349,9 +395,33 @@ public class GameController
         _model.PlayerModel.Position = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
         _model.PlayerModel.Rotation = 0f;
         _model.PlayerModel.Bullets.Clear();
+        _model.PlayerModel.Magazines = 4; // стартовое значение
+        _model.PlayerModel.ShotsFired = 0;
+        _model.PlayerModel.IsReloading = false;
+        _model.PlayerModel.ReloadTimer = 0f;
         // Сброс ботов
         _model.BotModels.Clear();
         _model.BotControllers.Clear();
         SpawnBotWave(_model.BotsInWave);
+    }
+
+    // Проверка подбора боеприпасов игроком
+    private void CheckAmmunitionPickup()
+    {
+        int pickedUp = 0;
+        for (int i = _model.AmmunitionControllers.Count - 1; i >= 0; i--)
+        {
+            var ammo = _model.AmmunitionControllers[i];
+            if (!ammo.Model.IsCollected && Vector2.Distance(_model.PlayerModel.Position, ammo.Model.Position) < 60f)
+            {
+                pickedUp++;
+                ammo.Model.IsCollected = true;
+                _model.AmmunitionControllers.RemoveAt(i);
+            }
+        }
+        if (pickedUp > 0)
+        {
+            _model.PlayerModel.Magazines = Math.Min(_model.PlayerModel.Magazines + pickedUp, PlayerModel.MaxMagazines);
+        }
     }
 }
