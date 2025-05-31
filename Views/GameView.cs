@@ -58,6 +58,21 @@ public class GameView
                 string killedText = $"Bots killed: {model.BotsKilled}";
                 spriteBatch.DrawString(model.GameTextFont, waveText, new Vector2(40, 40), Color.Yellow);
                 spriteBatch.DrawString(model.GameTextFont, killedText, new Vector2(40, 90), Color.Orange);
+                // Отображение оставшихся патронов
+                int ammoLeft = PlayerModel.MaxShotsBeforeReload - model.PlayerModel.ShotsFired;
+                string ammoText = $"Патроны: {ammoLeft}";
+                spriteBatch.DrawString(model.GameTextFont, ammoText, new Vector2(40, 140), Color.White);
+                // Надпись по центру экрана при перезарядке
+                if (model.PlayerModel.IsReloading)
+                {
+                    string reloadText = "Перезаряжаюсь";
+                    Vector2 textSize = model.GameTextFont.MeasureString(reloadText);
+                    Vector2 centerPos = new Vector2(
+                        (spriteBatch.GraphicsDevice.Viewport.Width - textSize.X) / 2,
+                        (spriteBatch.GraphicsDevice.Viewport.Height - textSize.Y) / 2
+                    );
+                    spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
+                }
             }
         }
         spriteBatch.End();

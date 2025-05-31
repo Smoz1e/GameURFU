@@ -8,6 +8,12 @@ public class PlayerModel
     public float Rotation { get; set; }
     public List<BulletController> Bullets { get; private set; }
 
+    public int ShotsFired = 0;
+    public bool IsReloading = false;
+    public float ReloadTimer = 0f;
+    public const int MaxShotsBeforeReload = 25;
+    public const float ReloadDuration = 2.5f;
+
     public PlayerModel(Vector2 startPosition, float speed)
     {
         Position = startPosition;

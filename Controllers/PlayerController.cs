@@ -61,8 +61,20 @@ public class PlayerController
         Vector2 directionToMouse = mousePosition - _model.Position;
         _model.Rotation = (float)Math.Atan2(directionToMouse.Y, directionToMouse.X);
 
+        // Перезарядка
+        if (_model.IsReloading)
+        {
+            _model.ReloadTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (_model.ReloadTimer >= PlayerModel.ReloadDuration)
+            {
+                _model.IsReloading = false;
+                _model.ReloadTimer = 0f;
+                _model.ShotsFired = 0;
+            }
+        }
+
         // Стрельба
-        if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+        if (!_model.IsReloading && mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
         {
             Vector2 bulletDirection = directionToMouse;
             if (bulletDirection.Length() > 0)
@@ -75,6 +87,12 @@ public class PlayerController
             var bulletController = new BulletController(bulletModel, bulletView);
 
             _model.Bullets.Add(bulletController);
+            _model.ShotsFired++;
+            if (_model.ShotsFired >= PlayerModel.MaxShotsBeforeReload)
+            {
+                _model.IsReloading = true;
+                _model.ReloadTimer = 0f;
+            }
         }
 
         // Обновление пуль

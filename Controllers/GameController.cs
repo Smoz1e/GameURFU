@@ -344,6 +344,7 @@ public class GameController
         SetDifficultyParams();
         _model.CurrentWave = 1;
         _model.BotsInWave = 1;
+        _model.BotsKilled = 0; // Сброс счетчика убитых ботов
         // Сброс игрока
         _model.PlayerModel.Position = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
         _model.PlayerModel.Rotation = 0f;
