@@ -34,6 +34,7 @@ public class GameController
         _model.StartButtonTexture = Content.Load<Texture2D>("startButton");
         _model.SettingsButtonTexture = Content.Load<Texture2D>("settingsButton");
         _model.ExitButtonTexture = Content.Load<Texture2D>("exitButton");
+        _model.TextMenuFont = Content.Load<SpriteFont>("TextMenu");
         var botTexture = Content.Load<Texture2D>("bot");
         var playerTexture = Content.Load<Texture2D>("playerTest");
         var bulletTexture = Content.Load<Texture2D>("bullet");

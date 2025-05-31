@@ -115,6 +115,20 @@ public class GameView
         spriteBatch.Draw(model.PixelTexture, easyRect, easyColor);
         spriteBatch.Draw(model.PixelTexture, mediumRect, mediumColor);
         spriteBatch.Draw(model.PixelTexture, hardRect, hardColor);
+        // Надписи уровней сложности с новым шрифтом
+        if (model.TextMenuFont != null)
+        {
+            // Центрирование текста по кнопке
+            Vector2 easySize = model.TextMenuFont.MeasureString("Easy");
+            Vector2 mediumSize = model.TextMenuFont.MeasureString("Medium");
+            Vector2 hardSize = model.TextMenuFont.MeasureString("Hard");
+            Vector2 easyPos = new Vector2(easyRect.X + (easyRect.Width - easySize.X) / 2, easyRect.Y + (easyRect.Height - easySize.Y) / 2);
+            Vector2 mediumPos = new Vector2(mediumRect.X + (mediumRect.Width - mediumSize.X) / 2, mediumRect.Y + (mediumRect.Height - mediumSize.Y) / 2);
+            Vector2 hardPos = new Vector2(hardRect.X + (hardRect.Width - hardSize.X) / 2, hardRect.Y + (hardRect.Height - hardSize.Y) / 2);
+            spriteBatch.DrawString(model.TextMenuFont, "Easy", easyPos, Color.Black);
+            spriteBatch.DrawString(model.TextMenuFont, "Medium", mediumPos, Color.Black);
+            spriteBatch.DrawString(model.TextMenuFont, "Hard", hardPos, Color.Black);
+        }
         // Текст (можно заменить на отрисовку псевдотекста или добавить SpriteFont)
         // Здесь для простоты просто прямоугольники разного цвета
     }

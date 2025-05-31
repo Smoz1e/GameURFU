@@ -1,3 +1,7 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/bot.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/bot.xnb","TextureProcessor","Texture2DContent",121241,1048661,0,4731733
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/startButton.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/startButton.xnb","TextureProcessor","Texture2DContent",5709,59221,0,018857
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/bullet.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/bullet.xnb","TextureProcessor","Texture2DContent",218,4181,0,0867714
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/exitButton.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/exitButton.xnb","TextureProcessor","Texture2DContent",6762,1083965,0,0495797
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/settingsButton.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/settingsButton.xnb","TextureProcessor","Texture2DContent",6274,1083965,0,0348273
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/startButton.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/startButton.xnb","TextureProcessor","Texture2DContent",6043,1083965,0,051182
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/testFon.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/testFon.xnb","TextureProcessor","Texture2DContent",407055,9720085,0,4802821
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/TextMenu.spritefont","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/TextMenu.xnb","FontDescriptionProcessor","SpriteFontContent",2068,21538,0,1076911
