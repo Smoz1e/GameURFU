@@ -14,8 +14,8 @@ public class BulletView
     public BulletView(Texture2D texture, int frameWidth, int frameHeight, float frameTime)
     {
         _texture = texture;
-        _frameWidth = frameWidth;
-        _frameHeight = frameHeight;
+        _frameWidth = frameWidth / 3;
+        _frameHeight = frameHeight / 3;
         _currentFrame = 0;
         _totalFrames = texture.Width / frameWidth;
         _frameTime = frameTime;

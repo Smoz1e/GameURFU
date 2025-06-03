@@ -87,7 +87,12 @@ public class PlayerController
                 bulletDirection.Normalize();
             }
 
-            var bulletModel = new BulletModel(_model.Position, bulletDirection, 500f);
+            // Смещение дула относительно центра игрока (например, вправо на 40 пикселей)
+            Vector2 gunOffset = new Vector2(30, 10); // подберите значение под вашу модель
+            Vector2 rotatedOffset = Vector2.Transform(gunOffset, Matrix.CreateRotationZ(_model.Rotation));
+            Vector2 bulletStart = _model.Position + rotatedOffset;
+
+            var bulletModel = new BulletModel(bulletStart, bulletDirection, 500f);
             var bulletView = new BulletView(_view._bulletTexture, 16, 16, 0.1f);
             var bulletController = new BulletController(bulletModel, bulletView);
 

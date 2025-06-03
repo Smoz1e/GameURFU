@@ -13,8 +13,8 @@ public class PlayerView
     public PlayerView(Texture2D texture, float desiredWidth, float desiredHeight, Texture2D bulletTexture)
     {
         _texture = texture ?? throw new ArgumentNullException(nameof(texture));
-        _desiredWidth = desiredWidth;
-        _desiredHeight = desiredHeight;
+        _desiredWidth = desiredWidth / 1.5f;
+        _desiredHeight = desiredHeight / 1.5f;
         _bulletTexture = bulletTexture;
     }
 
