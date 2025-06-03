@@ -78,6 +78,13 @@ public class PlayerController
             }
         }
 
+        // Принудительная перезарядка по клавише R
+        if (!_model.IsReloading && kstate.IsKeyDown(Keys.R) && _model.Magazines > 0 && _model.ShotsFired > 0)
+        {
+            _model.IsReloading = true;
+            _model.ReloadTimer = 0f;
+        }
+
         // Стрельба
         if (!_model.IsReloading && mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
         {

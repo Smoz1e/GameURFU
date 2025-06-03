@@ -15,6 +15,7 @@ public class PlayerModel
     public const float ReloadDuration = 2.5f;
     public int Magazines = 4;
     public const int MaxMagazines = 7;
+    public float ColliderRadius = 25f; // Радиус коллайдера игрока (по аналогии с ботом)
 
     public PlayerModel(Vector2 startPosition, float speed)
     {

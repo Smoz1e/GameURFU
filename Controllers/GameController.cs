@@ -44,7 +44,7 @@ public class GameController
         _ammunitionView = new AmmunitionView(ammunitionTexture, 50f);
         _model.PlayerModel = new PlayerModel(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f);
         var playerView = new PlayerView(playerTexture, 100f, 100f, bulletTexture);
-        _playerController = new PlayerController(_model.PlayerModel, playerView);        _model.BotModels = new List<BotModel>();
+        _playerController = new PlayerController(_model.PlayerModel, playerView); _model.BotModels = new List<BotModel>();
         _botView = new BotView(botTexture);
         _model.BotControllers = new List<BotController>();
         SpawnBotWave(_model.BotsInWave);
@@ -77,7 +77,7 @@ public class GameController
         _model.Obstacles.Add(new Rectangle(0, 0, 100, 650));
         _model.Obstacles.Add(new Rectangle(100, 100, 100, 500));
         _model.Obstacles.Add(new Rectangle(200, 100, 80, 470));
-        _model.Obstacles.Add(new Rectangle(300, 100, 120, 420));
+        _model.Obstacles.Add(new Rectangle(300, 100, 120, 450));
         _model.Obstacles.Add(new Rectangle(400, 100, 80, 320));
         _model.Obstacles.Add(new Rectangle(480, 100, 60, 270));
         _model.Obstacles.Add(new Rectangle(540, 100, 60, 200));
@@ -94,8 +94,12 @@ public class GameController
         _model.Obstacles.Add(new Rectangle(1600, 1100, 100, 500));
         _model.Obstacles.Add(new Rectangle(1550, 1300, 50, 500));
 
-       // Куст
-       _model.Obstacles.Add(new Rectangle(1500, 970, 50, 50));
+        // Куст
+        _model.Obstacles.Add(new Rectangle(1500, 970, 50, 50));
+
+        // Палатки
+        _model.Obstacles.Add(new Rectangle(110, 650, 150, 150));
+       _model.Obstacles.Add(new Rectangle(380, 530, 160, 140));
     }
 
     // Проверка пересечения круга и прямоугольника
@@ -167,28 +171,21 @@ public class GameController
                     var botController = _model.BotControllers[i];
                     botController.Update(gameTime, _model.PlayerModel.Position, _model.BotModels.ToArray(), _model.SpaceBetweenBots, _model.Obstacles);
 
-                    // Проверка столкновения игрока с ботом
-                    Rectangle playerRect = new Rectangle(
-                        (int)(_model.PlayerModel.Position.X - 50),
-                        (int)(_model.PlayerModel.Position.Y - 50),
-                        100, 100);
-                    Rectangle botRect = new Rectangle(
-                        (int)(_model.BotModels[i].Position.X - 50),
-                        (int)(_model.BotModels[i].Position.Y - 50),
-                        100, 100);
-                    if (playerRect.Intersects(botRect))
+                    // Проверка столкновения игрока с ботом (по кругам)
+                    float dist = Vector2.Distance(_model.PlayerModel.Position, _model.BotModels[i].Position);
+                    float sumRadius = _model.PlayerModel.ColliderRadius + _model.BotModels[i].ColliderRadius;
+                    if (dist < sumRadius)
                     {
                         _model.CurrentState = GameState.Menu;
                     }
-                    // Проверка столкновения пуль с ботами
+                    // Проверка столкновения пуль с ботами (по кругам)
                     for (int j = _model.PlayerModel.Bullets.Count - 1; j >= 0; j--)
                     {
                         var bullet = _model.PlayerModel.Bullets[j];
-                        Rectangle bulletRect = new Rectangle(
-                            (int)(bullet.Position.X - 7.5f),
-                            (int)(bullet.Position.Y - 7.5f),
-                            15, 15);
-                        if (bulletRect.Intersects(botRect))
+                        float bulletRadius = 7.5f; // радиус пули (можно вынести в модель)
+                        float botRadius = _model.BotModels[i].ColliderRadius;
+                        float distBullet = Vector2.Distance(bullet.Position, _model.BotModels[i].Position);
+                        if (distBullet < bulletRadius + botRadius)
                         {
                             // Спавн боеприпаса с шансом (1-3 за волну)
                             TrySpawnAmmunition(_model.BotModels[i].Position);

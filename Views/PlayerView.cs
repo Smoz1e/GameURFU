@@ -39,7 +39,7 @@ public class PlayerView
         );
 
         // Временная отрисовка синего коллайдера (круга)
-        float radius = Math.Min(_desiredWidth, _desiredHeight) / 3.0f;
+        float radius = model.ColliderRadius; // Теперь радиус берется из модели
         int segments = 32;
         Vector2 center = model.Position;
         DrawCircle(spriteBatch, center, radius, Color.Blue * 0.7f, segments);

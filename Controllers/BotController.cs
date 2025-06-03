@@ -54,7 +54,7 @@ public class BotController
 
         // Предполагаемое новое положение
         Vector2 newPos = _model.Position + _model.Direction * _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        float botRadius = 50f;
+        float botRadius = _model.ColliderRadius; // Используем радиус из модели
         bool collision = false;
         foreach (var obs in obstacles)
         {
