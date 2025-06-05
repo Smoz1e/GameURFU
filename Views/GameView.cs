@@ -58,6 +58,25 @@ public class GameView
                     ammo.Draw(spriteBatch);
             }
 
+            // Отрисовка полоски жизни игрока
+            int barWidth = 300;
+            int barHeight = 30;
+            int margin = 40;
+            int x = spriteBatch.GraphicsDevice.Viewport.Width - barWidth - margin;
+            int y = margin;
+            float healthPercent = (float)model.PlayerModel.Health / PlayerModel.MaxHealth;
+            Rectangle bgRect = new Rectangle(x, y, barWidth, barHeight);
+            Rectangle fgRect = new Rectangle(x, y, (int)(barWidth * healthPercent), barHeight);
+            spriteBatch.Draw(model.PixelTexture, bgRect, Color.DarkRed * 0.5f);
+            spriteBatch.Draw(model.PixelTexture, fgRect, Color.Red);
+            if (model.GameTextFont != null)
+            {
+                string hpText = $"HP: {model.PlayerModel.Health}/{PlayerModel.MaxHealth}";
+                Vector2 textSize = model.GameTextFont.MeasureString(hpText);
+                Vector2 textPos = new Vector2(x + (barWidth - textSize.X) / 2, y + (barHeight - textSize.Y) / 2);
+                spriteBatch.DrawString(model.GameTextFont, hpText, textPos, Color.White);
+            }
+
             // Текстовая отрисовка волны и убитых ботов
             if (model.GameTextFont != null)
             {

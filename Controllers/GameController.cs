@@ -176,7 +176,11 @@ public class GameController
                     float sumRadius = _model.PlayerModel.ColliderRadius + _model.BotModels[i].ColliderRadius;
                     if (dist < sumRadius)
                     {
-                        _model.CurrentState = GameState.Menu;
+                        _model.PlayerModel.TakeDamage(1);
+                        if (_model.PlayerModel.IsDead)
+                        {
+                            _model.CurrentState = GameState.Menu;
+                        }
                     }
                     // Проверка столкновения пуль с ботами (по кругам)
                     for (int j = _model.PlayerModel.Bullets.Count - 1; j >= 0; j--)
@@ -396,6 +400,8 @@ public class GameController
         _model.PlayerModel.ShotsFired = 0;
         _model.PlayerModel.IsReloading = false;
         _model.PlayerModel.ReloadTimer = 0f;
+        _model.PlayerModel.Health = PlayerModel.MaxHealth;
+        _model.PlayerModel.IsDead = false;
         // Сброс ботов
         _model.BotModels.Clear();
         _model.BotControllers.Clear();
