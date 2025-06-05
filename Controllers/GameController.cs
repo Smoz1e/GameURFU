@@ -110,6 +110,10 @@ public class GameController
        _model.Obstacles.Add(new Rectangle(380, 530, 160, 140));
 
         _model.CollisionMapTexture = Content.Load<Texture2D>("collisionMap"); // PNG с белыми препятствиями
+        _model.CollisionMaskWidth = _model.CollisionMapTexture.Width;
+        _model.CollisionMaskHeight = _model.CollisionMapTexture.Height;
+        _model.CollisionMaskData = new Color[_model.CollisionMaskWidth * _model.CollisionMaskHeight];
+        _model.CollisionMapTexture.GetData(_model.CollisionMaskData);
         _model.Obstacles.Clear(); // Удаляем старые препятствия
     }
 
@@ -433,20 +437,19 @@ public class GameController
         }
     }
 
-    // Проверка: можно ли пройти/спавниться в данной точке (или круге) по маске-коллизии
+    // Проверка: можно ли пройти/спавниться в данной точке (или круге) по маске-коллизии (оптимизировано)
     private bool IsCollision(Vector2 pos, float radius = 0)
     {
-        if (_model.CollisionMapTexture == null) return false;
-        int w = _model.CollisionMapTexture.Width;
-        int h = _model.CollisionMapTexture.Height;
+        if (_model.CollisionMaskData == null) return false;
+        int w = _model.CollisionMaskWidth;
+        int h = _model.CollisionMaskHeight;
         int px = (int)(pos.X / _graphics.PreferredBackBufferWidth * w);
         int py = (int)(pos.Y / _graphics.PreferredBackBufferHeight * h);
         if (px < 0 || py < 0 || px >= w || py >= h) return true;
-        Color[] data = new Color[w * h];
-        _model.CollisionMapTexture.GetData(data);
         if (radius <= 1)
         {
-            return data[py * w + px].R > 200 && data[py * w + px].G > 200 && data[py * w + px].B > 200;
+            var c = _model.CollisionMaskData[py * w + px];
+            return c.R > 200 && c.G > 200 && c.B > 200;
         }
         // Проверка круга (по маске)
         int rPix = (int)(radius / _graphics.PreferredBackBufferWidth * w);
@@ -458,7 +461,7 @@ public class GameController
             if (tx < 0 || ty < 0 || tx >= w || ty >= h) continue;
             if (dx * dx + dy * dy <= rPix * rPix)
             {
-                var c = data[ty * w + tx];
+                var c = _model.CollisionMaskData[ty * w + tx];
                 if (c.R > 200 && c.G > 200 && c.B > 200) return true;
             }
         }

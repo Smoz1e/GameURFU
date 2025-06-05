@@ -45,4 +45,7 @@ public class GameModel
     public Texture2D FullHeartTexture; // Текстура сердечка для отображения рядом с полоской здоровья
     public Texture2D CrosshairTexture; // Текстура прицела
     public Texture2D CollisionMapTexture; // Маска-коллизия (белое = препятствие)
+    public Color[] CollisionMaskData; // Кэш пикселей маски-коллизии
+    public int CollisionMaskWidth;
+    public int CollisionMaskHeight;
 }
