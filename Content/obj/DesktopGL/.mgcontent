@@ -8,6 +8,7 @@
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/bot.png</File>
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/bullet.png</File>
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/exitButton.png</File>
+    <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/full_heath.png</File>
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/GameText.spritefont</File>
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/Icon.jpg</File>
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/menuBackground.png</File>
@@ -18,6 +19,7 @@
     <File>c:/Users/ib258/Desktop/The_War_of__Layers/Content/TextMenu.spritefont</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

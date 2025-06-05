@@ -58,9 +58,9 @@ public class GameView
                     ammo.Draw(spriteBatch);
             }
 
-            // Отрисовка полоски жизни игрока
-            int barWidth = 300;
-            int barHeight = 30;
+            // Отрисовка полоски жизни игрока и сердечка
+            int barWidth =300;
+            int barHeight = 40;
             int margin = 40;
             int x = spriteBatch.GraphicsDevice.Viewport.Width - barWidth - margin;
             int y = margin;
@@ -69,6 +69,18 @@ public class GameView
             Rectangle fgRect = new Rectangle(x, y, (int)(barWidth * healthPercent), barHeight);
             spriteBatch.Draw(model.PixelTexture, bgRect, Color.DarkRed * 0.5f);
             spriteBatch.Draw(model.PixelTexture, fgRect, Color.Red);
+            // Сердечко
+            if (model.PixelTexture != null && model.GameTextFont != null)
+            {
+                Texture2D heartTexture = model.FullHeartTexture; // Добавим это свойство в GameModel
+                if (heartTexture != null)
+                {
+                    int heartSize = barHeight; // высота сердечка = высоте полоски
+                    int heartX = x - heartSize - 10; // 10px отступ слева от полоски
+                    int heartY = y;
+                    spriteBatch.Draw(heartTexture, new Rectangle(heartX, heartY, heartSize, heartSize), Color.White);
+                }
+            }
             if (model.GameTextFont != null)
             {
                 string hpText = $"HP: {model.PlayerModel.Health}/{PlayerModel.MaxHealth}";

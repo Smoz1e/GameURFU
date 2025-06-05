@@ -42,6 +42,7 @@ public class GameController
         var bulletTexture = Content.Load<Texture2D>("bullet");
         var ammunitionTexture = Content.Load<Texture2D>("Ammunition");
         _ammunitionView = new AmmunitionView(ammunitionTexture, 50f);
+        _model.FullHeartTexture = Content.Load<Texture2D>("full_heath");
         _model.PlayerModel = new PlayerModel(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f);
         var playerView = new PlayerView(playerTexture, 100f, 100f, bulletTexture);
         _playerController = new PlayerController(_model.PlayerModel, playerView); _model.BotModels = new List<BotModel>();
