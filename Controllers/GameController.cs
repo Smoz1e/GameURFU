@@ -258,7 +258,6 @@ public class GameController
     private Random _rnd = new Random();
 
     private int botRadius = 50;
-    private int minBotDistanceToObstacle = 100;
     private int _ammoToSpawnThisWave = 0;
     private int _ammoSpawnedThisWave = 0;
 

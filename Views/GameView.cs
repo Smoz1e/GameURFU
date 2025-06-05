@@ -31,20 +31,20 @@ public class GameView
         {
             spriteBatch.Draw(model.BackgroundTexture, new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.White);
             // Отрисовка препятствий красным цветом
-            // foreach (var rect in model.Obstacles)
-            // {
-            //     int cornerRadius = 30; // радиус скругления углов
-            //     // Основной прямоугольник (без углов)
-            //     Rectangle coreRect = new Rectangle(rect.X + cornerRadius, rect.Y, rect.Width - 2 * cornerRadius, rect.Height);
-            //     spriteBatch.Draw(model.PixelTexture, coreRect, Color.Red * 0.7f);
-            //     coreRect = new Rectangle(rect.X, rect.Y + cornerRadius, rect.Width, rect.Height - 2 * cornerRadius);
-            //     spriteBatch.Draw(model.PixelTexture, coreRect, Color.Red * 0.7f);
-            //     // 4 скругленных угла
-            //     DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Left + cornerRadius, rect.Top + cornerRadius), cornerRadius, Color.Red * 0.7f, 180, 270);
-            //     DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Right - cornerRadius, rect.Top + cornerRadius), cornerRadius, Color.Red * 0.7f, 270, 360);
-            //     DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Left + cornerRadius, rect.Bottom - cornerRadius), cornerRadius, Color.Red * 0.7f, 90, 180);
-            //     DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Right - cornerRadius, rect.Bottom - cornerRadius), cornerRadius, Color.Red * 0.7f, 0, 90);
-            // }
+            foreach (var rect in model.Obstacles)
+            {
+                int cornerRadius = 30; // радиус скругления углов
+                // Основной прямоугольник (без углов)
+                Rectangle coreRect = new Rectangle(rect.X + cornerRadius, rect.Y, rect.Width - 2 * cornerRadius, rect.Height);
+                spriteBatch.Draw(model.PixelTexture, coreRect, Color.Red * 0.7f);
+                coreRect = new Rectangle(rect.X, rect.Y + cornerRadius, rect.Width, rect.Height - 2 * cornerRadius);
+                spriteBatch.Draw(model.PixelTexture, coreRect, Color.Red * 0.7f);
+                // 4 скругленных угла
+                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Left + cornerRadius, rect.Top + cornerRadius), cornerRadius, Color.Red * 0.7f, 180, 270);
+                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Right - cornerRadius, rect.Top + cornerRadius), cornerRadius, Color.Red * 0.7f, 270, 360);
+                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Left + cornerRadius, rect.Bottom - cornerRadius), cornerRadius, Color.Red * 0.7f, 90, 180);
+                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Right - cornerRadius, rect.Bottom - cornerRadius), cornerRadius, Color.Red * 0.7f, 0, 90);
+            }
             foreach (var botModel in model.BotModels)
             {
                 botView.Draw(spriteBatch, botModel, 100f, 100f);
