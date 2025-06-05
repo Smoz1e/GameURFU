@@ -54,15 +54,11 @@ public class BotController
 
         // Предполагаемое новое положение
         Vector2 newPos = _model.Position + _model.Direction * _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        float botRadius = _model.ColliderRadius; // Используем радиус из модели (адаптируется в GameController)
+        float botRadius = _model.ColliderRadius;
         bool collision = false;
-        foreach (var obs in obstacles)
+        if (GameControllerStatic.IsCollisionStatic != null)
         {
-            if (CircleIntersectsRectangle(newPos, botRadius, obs))
-            {
-                collision = true;
-                break;
-            }
+            collision = GameControllerStatic.IsCollisionStatic(newPos, botRadius);
         }
         if (!collision)
         {

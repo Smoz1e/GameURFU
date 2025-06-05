@@ -34,22 +34,16 @@ public class PlayerController
         if (movement != Vector2.Zero)
         {
             movement.Normalize();
-            _model.Position += movement * updatedSpeed;
-            // Проверка столкновения с препятствиями (круглый коллайдер)
-            float radius = _model.ColliderRadius;
-            Vector2 center = _model.Position;
+            Vector2 newPos = _model.Position + movement * updatedSpeed;
+            // Проверка по маске-коллизии
             bool collided = false;
-            foreach (var obstacle in obstacles)
+            if (GameControllerStatic.IsCollisionStatic != null)
             {
-                if (CircleIntersectsRectangle(center, radius, obstacle))
-                {
-                    collided = true;
-                    break;
-                }
+                collided = GameControllerStatic.IsCollisionStatic(newPos, _model.ColliderRadius);
             }
-            if (collided)
+            if (!collided)
             {
-                _model.Position = oldPosition;
+                _model.Position = newPos;
             }
         }
 

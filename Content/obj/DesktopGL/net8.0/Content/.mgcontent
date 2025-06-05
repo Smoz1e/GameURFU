@@ -7,6 +7,7 @@
     <File>C:/Users/ib258/Desktop/GameURFU/Content/Ammunition.png</File>
     <File>C:/Users/ib258/Desktop/GameURFU/Content/bot.png</File>
     <File>C:/Users/ib258/Desktop/GameURFU/Content/bullet.png</File>
+    <File>C:/Users/ib258/Desktop/GameURFU/Content/collisionMap.png</File>
     <File>C:/Users/ib258/Desktop/GameURFU/Content/crosshairs_green1.png</File>
     <File>C:/Users/ib258/Desktop/GameURFU/Content/exitButton.png</File>
     <File>C:/Users/ib258/Desktop/GameURFU/Content/full_heath.png</File>
@@ -20,6 +21,7 @@
     <File>C:/Users/ib258/Desktop/GameURFU/Content/TextMenu.spritefont</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />

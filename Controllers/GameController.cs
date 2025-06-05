@@ -4,6 +4,11 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System;
 
+public static class GameControllerStatic
+{
+    public static Func<Vector2, float, bool> IsCollisionStatic;
+}
+
 public class GameController
 {
     private GameModel _model;
@@ -20,6 +25,7 @@ public class GameController
         _view = view;
         _graphics = graphics;
         _previousMouseState = Mouse.GetState();
+        GameControllerStatic.IsCollisionStatic = IsCollision;
     }
 
     public void Initialize()
@@ -102,6 +108,9 @@ public class GameController
         // Палатки
         _model.Obstacles.Add(new Rectangle(110, 650, 150, 150));
        _model.Obstacles.Add(new Rectangle(380, 530, 160, 140));
+
+        _model.CollisionMapTexture = Content.Load<Texture2D>("collisionMap"); // PNG с белыми препятствиями
+        _model.Obstacles.Clear(); // Удаляем старые препятствия
     }
 
     // Проверка пересечения круга и прямоугольника
@@ -300,21 +309,7 @@ public class GameController
                     _rnd.Next(botRadius, _graphics.PreferredBackBufferWidth - botRadius),
                     _rnd.Next(botRadius, _graphics.PreferredBackBufferHeight - botRadius)
                 );
-                valid = true;
-                foreach (var obs in _model.Obstacles)
-                {
-                    Rectangle expanded = new Rectangle(
-                        obs.X - minBotDistanceToObstacle - botRadius,
-                        obs.Y - minBotDistanceToObstacle - botRadius,
-                        obs.Width + 2 * (minBotDistanceToObstacle + botRadius),
-                        obs.Height + 2 * (minBotDistanceToObstacle + botRadius)
-                    );
-                    if (CircleIntersectsRectangle(pos, 1, expanded))
-                    {
-                        valid = false;
-                        break;
-                    }
-                }
+                valid = !IsCollision(pos, botRadius);
                 if (valid)
                 {
                     foreach (var other in _model.BotModels)
@@ -437,5 +432,37 @@ public class GameController
         {
             _model.PlayerModel.Magazines = Math.Min(_model.PlayerModel.Magazines + pickedUp, PlayerModel.MaxMagazines);
         }
+    }
+
+    // Проверка: можно ли пройти/спавниться в данной точке (или круге) по маске-коллизии
+    private bool IsCollision(Vector2 pos, float radius = 0)
+    {
+        if (_model.CollisionMapTexture == null) return false;
+        int w = _model.CollisionMapTexture.Width;
+        int h = _model.CollisionMapTexture.Height;
+        int px = (int)(pos.X / _graphics.PreferredBackBufferWidth * w);
+        int py = (int)(pos.Y / _graphics.PreferredBackBufferHeight * h);
+        if (px < 0 || py < 0 || px >= w || py >= h) return true;
+        Color[] data = new Color[w * h];
+        _model.CollisionMapTexture.GetData(data);
+        if (radius <= 1)
+        {
+            return data[py * w + px].R > 200 && data[py * w + px].G > 200 && data[py * w + px].B > 200;
+        }
+        // Проверка круга (по маске)
+        int rPix = (int)(radius / _graphics.PreferredBackBufferWidth * w);
+        for (int dx = -rPix; dx <= rPix; dx++)
+        for (int dy = -rPix; dy <= rPix; dy++)
+        {
+            int tx = px + dx;
+            int ty = py + dy;
+            if (tx < 0 || ty < 0 || tx >= w || ty >= h) continue;
+            if (dx * dx + dy * dy <= rPix * rPix)
+            {
+                var c = data[ty * w + tx];
+                if (c.R > 200 && c.G > 200 && c.B > 200) return true;
+            }
+        }
+        return false;
     }
 }
