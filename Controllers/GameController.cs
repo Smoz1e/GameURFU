@@ -166,6 +166,14 @@ public class GameController
                 }
                 break;
             case GameState.Playing:
+                // Адаптивный радиус коллизии для игрока и ботов
+                float baseScreenHeight = 1080f;
+                float scale = _graphics.PreferredBackBufferHeight / baseScreenHeight;
+                _model.PlayerModel.ColliderRadius = 25f * scale;
+                foreach (var bot in _model.BotModels)
+                {
+                    bot.ColliderRadius = 25f * scale;
+                }
                 _playerController.Update(gameTime, _graphics, _model.Obstacles);
                 CheckAmmunitionPickup();
                 for (int i = _model.BotControllers.Count - 1; i >= 0; i--)

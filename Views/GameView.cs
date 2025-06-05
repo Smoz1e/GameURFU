@@ -49,6 +49,11 @@ public class GameView
             {
                 botView.Draw(spriteBatch, botModel, 100f, 100f);
             }
+            // Отрисовка боеприпасов
+            foreach (var ammo in model.AmmunitionControllers)
+            {
+                ammo.Draw(spriteBatch);
+            }
             playerController.Draw(spriteBatch);
 
             // Отрисовка полоски жизни игрока и сердечка
