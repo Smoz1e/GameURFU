@@ -74,7 +74,12 @@ public class PlayerController
                     _model.ReloadTimer = 0f;
                     _model.ShotsFired = 0;
                 }
-                // Если магазинов нет, игрок остается на перезарядке
+                else
+                {
+                    // Если магазинов нет, просто завершаем перезарядку, но патроны не пополняем
+                    _model.IsReloading = false;
+                    _model.ReloadTimer = 0f;
+                }
             }
         }
 

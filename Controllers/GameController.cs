@@ -404,6 +404,7 @@ public class GameController
         _model.PlayerModel.ReloadTimer = 0f;
         _model.PlayerModel.Health = PlayerModel.MaxHealth;
         _model.PlayerModel.IsDead = false;
+        _ammoSpawnedThisWave = 0;
         // Сброс ботов
         _model.BotModels.Clear();
         _model.BotControllers.Clear();
