@@ -42,6 +42,8 @@ public class GameController
         var bulletTexture = Content.Load<Texture2D>("bullet");
         var ammunitionTexture = Content.Load<Texture2D>("Ammunition");
         _ammunitionView = new AmmunitionView(ammunitionTexture, 50f);
+        _model.FullHeartTexture = Content.Load<Texture2D>("full_heath");
+        _model.CrosshairTexture = Content.Load<Texture2D>("crosshairs_green1");
         _model.PlayerModel = new PlayerModel(new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2), 300f);
         var playerView = new PlayerView(playerTexture, 100f, 100f, bulletTexture);
         _playerController = new PlayerController(_model.PlayerModel, playerView); _model.BotModels = new List<BotModel>();
@@ -164,6 +166,14 @@ public class GameController
                 }
                 break;
             case GameState.Playing:
+                // Адаптивный радиус коллизии для игрока и ботов
+                float baseScreenHeight = 1080f;
+                float scale = _graphics.PreferredBackBufferHeight / baseScreenHeight;
+                _model.PlayerModel.ColliderRadius = 25f * scale;
+                foreach (var bot in _model.BotModels)
+                {
+                    bot.ColliderRadius = 25f * scale;
+                }
                 _playerController.Update(gameTime, _graphics, _model.Obstacles);
                 CheckAmmunitionPickup();
                 for (int i = _model.BotControllers.Count - 1; i >= 0; i--)
@@ -176,7 +186,11 @@ public class GameController
                     float sumRadius = _model.PlayerModel.ColliderRadius + _model.BotModels[i].ColliderRadius;
                     if (dist < sumRadius)
                     {
-                        _model.CurrentState = GameState.Menu;
+                        _model.PlayerModel.TakeDamage(1);
+                        if (_model.PlayerModel.IsDead)
+                        {
+                            _model.CurrentState = GameState.Menu;
+                        }
                     }
                     // Проверка столкновения пуль с ботами (по кругам)
                     for (int j = _model.PlayerModel.Bullets.Count - 1; j >= 0; j--)
@@ -396,6 +410,9 @@ public class GameController
         _model.PlayerModel.ShotsFired = 0;
         _model.PlayerModel.IsReloading = false;
         _model.PlayerModel.ReloadTimer = 0f;
+        _model.PlayerModel.Health = PlayerModel.MaxHealth;
+        _model.PlayerModel.IsDead = false;
+        _ammoSpawnedThisWave = 0;
         // Сброс ботов
         _model.BotModels.Clear();
         _model.BotControllers.Clear();

@@ -49,13 +49,42 @@ public class GameView
             {
                 botView.Draw(spriteBatch, botModel, 100f, 100f);
             }
-            playerController.Draw(spriteBatch);
-
             // Отрисовка боеприпасов
             foreach (var ammo in model.AmmunitionControllers)
             {
-                if (ammo != null && ammo.View != null)
-                    ammo.Draw(spriteBatch);
+                ammo.Draw(spriteBatch);
+            }
+            playerController.Draw(spriteBatch);
+
+            // Отрисовка полоски жизни игрока и сердечка
+            int barWidth =300;
+            int barHeight = 40;
+            int margin = 40;
+            int x = spriteBatch.GraphicsDevice.Viewport.Width - barWidth - margin;
+            int y = margin;
+            float healthPercent = (float)model.PlayerModel.Health / PlayerModel.MaxHealth;
+            Rectangle bgRect = new Rectangle(x, y, barWidth, barHeight);
+            Rectangle fgRect = new Rectangle(x, y, (int)(barWidth * healthPercent), barHeight);
+            spriteBatch.Draw(model.PixelTexture, bgRect, Color.DarkRed * 0.5f);
+            spriteBatch.Draw(model.PixelTexture, fgRect, Color.Red);
+            // Сердечко
+            if (model.PixelTexture != null && model.GameTextFont != null)
+            {
+                Texture2D heartTexture = model.FullHeartTexture; // Добавим это свойство в GameModel
+                if (heartTexture != null)
+                {
+                    int heartSize = barHeight; // высота сердечка = высоте полоски
+                    int heartX = x - heartSize - 10; // 10px отступ слева от полоски
+                    int heartY = y;
+                    spriteBatch.Draw(heartTexture, new Rectangle(heartX, heartY, heartSize, heartSize), Color.White);
+                }
+            }
+            if (model.GameTextFont != null)
+            {
+                string hpText = $"HP: {model.PlayerModel.Health}/{PlayerModel.MaxHealth}";
+                Vector2 textSize = model.GameTextFont.MeasureString(hpText);
+                Vector2 textPos = new Vector2(x + (barWidth - textSize.X) / 2, y + (barHeight - textSize.Y) / 2);
+                spriteBatch.DrawString(model.GameTextFont, hpText, textPos, Color.White);
             }
 
             // Текстовая отрисовка волны и убитых ботов
@@ -83,6 +112,16 @@ public class GameView
                     );
                     spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
                 }
+            }
+
+            // Отрисовка прицела вместо курсора
+            if (model.CrosshairTexture != null)
+            {
+                var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+                int crosshairSize = 20; // размер прицела
+                int crosshairX = mouseState.X - crosshairSize / 2;
+                int crosshairY = mouseState.Y - crosshairSize / 2;
+                spriteBatch.Draw(model.CrosshairTexture, new Rectangle(crosshairX, crosshairY, crosshairSize, crosshairSize), Color.White);
             }
         }
         spriteBatch.End();

@@ -1,2 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/ib258/Desktop/GameURFU/Content/menuBackground.png","C:/Users/ib258/Desktop/GameURFU/Content/bin/DesktopGL/Content/menuBackground.xnb","TextureProcessor","Texture2DContent",263608,4194389,0,2586697
+"C:/Users/ib258/Desktop/GameURFU/Content/crosshairs_green1.png","C:/Users/ib258/Desktop/GameURFU/Content/bin/DesktopGL/Content/crosshairs_green1.xnb","TextureProcessor","Texture2DContent",146,281,0,1041316
+"C:/Users/ib258/Desktop/GameURFU/Content/full_heath.png","C:/Users/ib258/Desktop/GameURFU/Content/bin/DesktopGL/Content/full_heath.xnb","TextureProcessor","Texture2DContent",8608,28949,0,0050526

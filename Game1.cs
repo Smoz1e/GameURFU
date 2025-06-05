@@ -42,6 +42,11 @@ namespace The_War_of__Layers
 
         protected override void Update(GameTime gameTime)
         {
+            // Скрываем курсор только во время игры
+            if (_gameModel != null && _gameModel.CurrentState == GameState.Playing)
+                IsMouseVisible = false;
+            else
+                IsMouseVisible = true;
             _gameController.Update(gameTime);
             base.Update(gameTime);
         }

@@ -16,6 +16,9 @@ public class PlayerModel
     public int Magazines = 4;
     public const int MaxMagazines = 7;
     public float ColliderRadius = 25f; // Радиус коллайдера игрока (по аналогии с ботом)
+    public int Health = 100; // Начальное здоровье игрока
+    public const int MaxHealth = 100; // Максимальное здоровье игрока
+    public bool IsDead = false;
 
     public PlayerModel(Vector2 startPosition, float speed)
     {
@@ -23,5 +26,16 @@ public class PlayerModel
         Speed = speed;
         Rotation = 0f;
         Bullets = new List<BulletController>();
+    }
+
+    public void TakeDamage(int amount)
+    {
+        if (IsDead) return;
+        Health -= amount;
+        if (Health <= 0)
+        {
+            Health = 0;
+            IsDead = true;
+        }
     }
 }

@@ -1,4 +1,4 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/Ammunition.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/Ammunition.xnb","TextureProcessor","Texture2DContent",795,1189,0,1277111
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/GameText.spritefont","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/GameText.xnb","FontDescriptionProcessor","SpriteFontContent",2270,139952,0,1447674
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/playerTest.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/playerTest.xnb","TextureProcessor","Texture2DContent",184042,1162885,0,0435274
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/crosshairs_green1.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/crosshairs_green1.xnb","TextureProcessor","Texture2DContent",146,281,0,0897798
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/full_heath.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/full_heath.xnb","TextureProcessor","Texture2DContent",8608,28949,0,0047356
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/playerTest.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/playerTest.xnb","TextureProcessor","Texture2DContent",6945,516085,0,0307485

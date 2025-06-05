@@ -36,7 +36,7 @@ public class PlayerController
             movement.Normalize();
             _model.Position += movement * updatedSpeed;
             // Проверка столкновения с препятствиями (круглый коллайдер)
-            float radius = Math.Min(_view._texture.Width, _view._texture.Height) / 14f;
+            float radius = _model.ColliderRadius;
             Vector2 center = _model.Position;
             bool collided = false;
             foreach (var obstacle in obstacles)
@@ -74,7 +74,12 @@ public class PlayerController
                     _model.ReloadTimer = 0f;
                     _model.ShotsFired = 0;
                 }
-                // Если магазинов нет, игрок остается на перезарядке
+                else
+                {
+                    // Если магазинов нет, просто завершаем перезарядку, но патроны не пополняем
+                    _model.IsReloading = false;
+                    _model.ReloadTimer = 0f;
+                }
             }
         }
 
@@ -88,32 +93,37 @@ public class PlayerController
         // Стрельба
         if (!_model.IsReloading && mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
         {
-            Vector2 bulletDirection = directionToMouse;
-            if (bulletDirection.Length() > 0)
+            // Проверяем, есть ли патроны (ShotsFired < MaxShotsBeforeReload) и хотя бы 1 магазин
+            if (_model.ShotsFired < PlayerModel.MaxShotsBeforeReload && (_model.Magazines > 0 || _model.ShotsFired < PlayerModel.MaxShotsBeforeReload))
             {
-                bulletDirection.Normalize();
-            }
-
-            // Смещение дула относительно центра игрока (например, вправо на 40 пикселей)
-            Vector2 gunOffset = new Vector2(30, 10); // подберите значение под вашу модель
-            Vector2 rotatedOffset = Vector2.Transform(gunOffset, Matrix.CreateRotationZ(_model.Rotation));
-            Vector2 bulletStart = _model.Position + rotatedOffset;
-
-            var bulletModel = new BulletModel(bulletStart, bulletDirection, 500f);
-            var bulletView = new BulletView(_view._bulletTexture, 16, 16, 0.1f);
-            var bulletController = new BulletController(bulletModel, bulletView);
-
-            _model.Bullets.Add(bulletController);
-            _model.ShotsFired++;
-            if (_model.ShotsFired >= PlayerModel.MaxShotsBeforeReload)
-            {
-                if (_model.Magazines > 0)
+                Vector2 bulletDirection = directionToMouse;
+                if (bulletDirection.Length() > 0)
                 {
-                    _model.IsReloading = true;
-                    _model.ReloadTimer = 0f;
+                    bulletDirection.Normalize();
                 }
-                // Если магазинов нет, не перезаряжаем, игрок не может стрелять
+
+                // Смещение дула относительно центра игрока (например, вправо на 40 пикселей)
+                Vector2 gunOffset = new Vector2(30, 10); // подберите значение под вашу модель
+                Vector2 rotatedOffset = Vector2.Transform(gunOffset, Matrix.CreateRotationZ(_model.Rotation));
+                Vector2 bulletStart = _model.Position + rotatedOffset;
+
+                var bulletModel = new BulletModel(bulletStart, bulletDirection, 500f);
+                var bulletView = new BulletView(_view._bulletTexture, 16, 16, 0.1f);
+                var bulletController = new BulletController(bulletModel, bulletView);
+
+                _model.Bullets.Add(bulletController);
+                _model.ShotsFired++;
+                if (_model.ShotsFired >= PlayerModel.MaxShotsBeforeReload)
+                {
+                    if (_model.Magazines > 0)
+                    {
+                        _model.IsReloading = true;
+                        _model.ReloadTimer = 0f;
+                    }
+                    // Если магазинов нет, не перезаряжаем, игрок не может стрелять
+                }
             }
+            // Если патронов нет, не стреляем и не уходим в минус
         }
 
         // Обновление пуль
