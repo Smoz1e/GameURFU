@@ -112,6 +112,55 @@ public class GameView
                     );
                     spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
                 }
+                // Сообщение о победе
+                if (model.IsVictory)
+                {
+                    string victoryText = "Вы победили!";
+                    Vector2 textSize = model.GameTextFont.MeasureString(victoryText);
+                    Vector2 centerPos = new Vector2(
+                        (spriteBatch.GraphicsDevice.Viewport.Width - textSize.X) / 2,
+                        (spriteBatch.GraphicsDevice.Viewport.Height - textSize.Y) / 2 - 100
+                    );
+                    spriteBatch.DrawString(model.GameTextFont, victoryText, centerPos, Color.LimeGreen);
+                }
+            }
+
+            // Текстовая отрисовка волны и убитых ботов
+            if (model.GameTextFont != null)
+            {
+                string waveText = $"Wave: {model.CurrentWave}";
+                string killedText = $"Bots killed: {model.BotsKilled}";
+                spriteBatch.DrawString(model.GameTextFont, waveText, new Vector2(40, 40), Color.Yellow);
+                spriteBatch.DrawString(model.GameTextFont, killedText, new Vector2(40, 90), Color.Orange);
+                // Отображение оставшихся патронов
+                int ammoLeft = PlayerModel.MaxShotsBeforeReload - model.PlayerModel.ShotsFired;
+                string ammoText = $"Патроны: {ammoLeft}";
+                spriteBatch.DrawString(model.GameTextFont, ammoText, new Vector2(40, 140), Color.White);
+                // Отображение количества магазинов
+                string magText = $"Магазины: {model.PlayerModel.Magazines}";
+                spriteBatch.DrawString(model.GameTextFont, magText, new Vector2(40, 180), Color.LightBlue);
+                // Надпись по центру экрана при перезарядке
+                if (model.PlayerModel.IsReloading)
+                {
+                    string reloadText = "Перезаряжаюсь";
+                    Vector2 textSize = model.GameTextFont.MeasureString(reloadText);
+                    Vector2 centerPos = new Vector2(
+                        (spriteBatch.GraphicsDevice.Viewport.Width - textSize.X) / 2,
+                        (spriteBatch.GraphicsDevice.Viewport.Height - textSize.Y) / 2
+                    );
+                    spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
+                }
+                // Сообщение о победе
+                if (model.IsVictory)
+                {
+                    string victoryText = "Вы победили!";
+                    Vector2 textSize = model.GameTextFont.MeasureString(victoryText);
+                    Vector2 centerPos = new Vector2(
+                        (spriteBatch.GraphicsDevice.Viewport.Width - textSize.X) / 2,
+                        (spriteBatch.GraphicsDevice.Viewport.Height - textSize.Y) / 2 - 100
+                    );
+                    spriteBatch.DrawString(model.GameTextFont, victoryText, centerPos, Color.LimeGreen);
+                }
             }
 
             // Отрисовка прицела вместо курсора

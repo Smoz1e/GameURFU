@@ -241,9 +241,16 @@ public class GameController
                 // Проверка на новую волну
                 if (_model.BotControllers.Count == 0)
                 {
-                    _model.CurrentWave++;
-                    _model.BotsInWave++;
-                    SpawnBotWave(_model.BotsInWave);
+                    if (_model.CurrentWave >= 7)
+                    {
+                        _model.IsVictory = true;
+                    }
+                    else
+                    {
+                        _model.CurrentWave++;
+                        _model.BotsInWave++;
+                        SpawnBotWave(_model.BotsInWave);
+                    }
                 }
                 if (keyboardState.IsKeyDown(Keys.Escape))
                 {
@@ -411,6 +418,7 @@ public class GameController
         _model.PlayerModel.Health = PlayerModel.MaxHealth;
         _model.PlayerModel.IsDead = false;
         _ammoSpawnedThisWave = 0;
+        _model.IsVictory = false; // Сброс флага победы
         // Сброс ботов
         _model.BotModels.Clear();
         _model.BotControllers.Clear();

@@ -94,3 +94,4 @@ C:\Users\ib258\Desktop\GameURFU\bin\Debug\net8.0\Content\crosshairs_green1.xnb
 C:\Users\ib258\Desktop\GameURFU\bin\Debug\net8.0\Content\full_heath.xnb
 C:\Users\ib258\Desktop\GameURFU\bin\Debug\net8.0\Content\ColizionFon.xnb
 C:\Users\ib258\Desktop\GameURFU\bin\Debug\net8.0\Content\collisionMap.xnb
+C:\Users\ib258\Desktop\The_War_of__Layers\bin\Debug\net8.0\Content\collisionMap.xnb

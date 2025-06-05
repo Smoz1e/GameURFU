@@ -4,21 +4,21 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/Ammunition.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/bot.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/bullet.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/collisionMap.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/crosshairs_green1.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/exitButton.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/full_heath.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/GameText.spritefont</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/Icon.jpg</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/menuBackground.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/playerTest.jpg</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/settingsButton.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/startButton.png</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/testFon.jpg</File>
-    <File>C:/Users/ib258/Desktop/GameURFU/Content/TextMenu.spritefont</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/Ammunition.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/bot.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/bullet.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/collisionMap.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/crosshairs_green1.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/exitButton.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/full_heath.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/GameText.spritefont</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/Icon.jpg</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/menuBackground.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/playerTest.jpg</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/settingsButton.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/startButton.png</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/testFon.jpg</File>
+    <File>C:/Users/ib258/Desktop/The_War_of__Layers/Content/TextMenu.spritefont</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

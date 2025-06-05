@@ -48,4 +48,5 @@ public class GameModel
     public Color[] CollisionMaskData; // Кэш пикселей маски-коллизии
     public int CollisionMaskWidth;
     public int CollisionMaskHeight;
+    public bool IsVictory = false;
 }
