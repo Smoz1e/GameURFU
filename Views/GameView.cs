@@ -51,13 +51,6 @@ public class GameView
             }
             playerController.Draw(spriteBatch);
 
-            // Отрисовка боеприпасов
-            foreach (var ammo in model.AmmunitionControllers)
-            {
-                if (ammo != null && ammo.View != null)
-                    ammo.Draw(spriteBatch);
-            }
-
             // Отрисовка полоски жизни игрока и сердечка
             int barWidth =300;
             int barHeight = 40;
@@ -114,6 +107,16 @@ public class GameView
                     );
                     spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
                 }
+            }
+
+            // Отрисовка прицела вместо курсора
+            if (model.CrosshairTexture != null)
+            {
+                var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
+                int crosshairSize = 20; // размер прицела
+                int crosshairX = mouseState.X - crosshairSize / 2;
+                int crosshairY = mouseState.Y - crosshairSize / 2;
+                spriteBatch.Draw(model.CrosshairTexture, new Rectangle(crosshairX, crosshairY, crosshairSize, crosshairSize), Color.White);
             }
         }
         spriteBatch.End();

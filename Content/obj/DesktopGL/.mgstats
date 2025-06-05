@@ -1,5 +1,4 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/bullet.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/bullet.xnb","TextureProcessor","Texture2DContent",762,1685,0,094166
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/full_heath.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/full_heath.xnb","TextureProcessor","Texture2DContent",8608,28949,0,0076353
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/menuBackground.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/menuBackground.xnb","TextureProcessor","Texture2DContent",263608,4194389,0,1236045
-"c:/Users/ib258/Desktop/The_War_of__Layers/Content/playerTest.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/playerTest.xnb","TextureProcessor","Texture2DContent",6945,516085,0,0144827
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/crosshairs_green1.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/crosshairs_green1.xnb","TextureProcessor","Texture2DContent",146,281,0,0897798
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/full_heath.png","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/full_heath.xnb","TextureProcessor","Texture2DContent",8608,28949,0,0047356
+"c:/Users/ib258/Desktop/The_War_of__Layers/Content/playerTest.jpg","c:/Users/ib258/Desktop/The_War_of__Layers/Content/bin/DesktopGL/playerTest.xnb","TextureProcessor","Texture2DContent",6945,516085,0,0307485

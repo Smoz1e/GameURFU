@@ -43,4 +43,5 @@ public class GameModel
     public bool IsSettingsModalOpen = false;
     public int BotsKilled = 0;
     public Texture2D FullHeartTexture; // Текстура сердечка для отображения рядом с полоской здоровья
+    public Texture2D CrosshairTexture; // Текстура прицела
 }
