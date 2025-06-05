@@ -39,11 +39,11 @@ public class BotView
         Texture2D pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
         pixel.SetData(new[] { Color.White });
         float increment = MathHelper.TwoPi / segments;
-        Vector2 lastPoint = center + radius * new Vector2((float)Math.Cos(0), (float)Math.Sin(0));
+        var lastPoint = center + radius * new Vector2((float)Math.Cos(0), (float)Math.Sin(0));
         for (int i = 1; i <= segments; i++)
         {
             float angle = increment * i;
-            Vector2 nextPoint = center + radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+            var nextPoint = center + radius * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
             DrawLine(spriteBatch, pixel, lastPoint, nextPoint, color);
             lastPoint = nextPoint;
         }

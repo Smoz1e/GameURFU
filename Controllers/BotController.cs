@@ -14,13 +14,13 @@ public class BotController
     public void Update(GameTime gameTime, Vector2 playerPosition, BotModel[] otherBots, float spaceBetweenBots, List<Rectangle> obstacles)
     {
         // Рассчитываем направление к игроку
-        Vector2 toPlayer = playerPosition - _model.Position;
-        Vector2 moveDir = Vector2.Zero;
+        var toPlayer = playerPosition - _model.Position;
+        var moveDir = Vector2.Zero;
         if (toPlayer.Length() > 0)
             moveDir = Vector2.Normalize(toPlayer);
 
         // Суммируем силы отталкивания от других ботов
-        Vector2 repel = Vector2.Zero;
+        var repel = Vector2.Zero;
         int repelCount = 0;
         float repelRadius = spaceBetweenBots * 0.9f; // чуть меньше, чтобы не было "липкости"
         foreach (var bot in otherBots)
@@ -30,7 +30,7 @@ public class BotController
                 float dist = Vector2.Distance(_model.Position, bot.Position);
                 if (dist < repelRadius && dist > 0.01f)
                 {
-                    Vector2 away = _model.Position - bot.Position;
+                    var away = _model.Position - bot.Position;
                     away.Normalize();
                     // Чем ближе — тем сильнее отталкивание
                     float force = (repelRadius - dist) / repelRadius;
@@ -47,13 +47,13 @@ public class BotController
         }
 
         // Итоговое направление: к игроку + отталкивание
-        Vector2 finalDir = moveDir + repel;
+        var finalDir = moveDir + repel;
         if (finalDir.Length() > 0)
             finalDir.Normalize();
         _model.Direction = finalDir;
 
         // Предполагаемое новое положение
-        Vector2 newPos = _model.Position + _model.Direction * _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+        var newPos = _model.Position + _model.Direction * _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         float botRadius = _model.ColliderRadius;
         bool collision = false;
         if (GameControllerStatic.IsCollisionStatic != null)
