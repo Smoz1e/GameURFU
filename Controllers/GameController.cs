@@ -77,6 +77,39 @@ public class GameController
             buttonHeight
         );
 
+
+        // Создание 1x1 пиксельной текстуры для отрисовки препятствий
+        _model.PixelTexture = new Texture2D(_graphics.GraphicsDevice, 1, 1);
+        _model.PixelTexture.SetData(new[] { Color.White });
+
+        // Пример препятствий для теста (можно редактировать координаты и размеры)
+        _model.Obstacles.Add(new Rectangle(0, 0, 100, 650));
+        _model.Obstacles.Add(new Rectangle(100, 100, 100, 500));
+        _model.Obstacles.Add(new Rectangle(200, 100, 80, 470));
+        _model.Obstacles.Add(new Rectangle(300, 100, 120, 450));
+        _model.Obstacles.Add(new Rectangle(400, 100, 80, 320));
+        _model.Obstacles.Add(new Rectangle(480, 100, 60, 270));
+        _model.Obstacles.Add(new Rectangle(540, 100, 60, 200));
+        _model.Obstacles.Add(new Rectangle(540, 100, 60, 200));
+        _model.Obstacles.Add(new Rectangle(640, 100, 100, 150));
+        _model.Obstacles.Add(new Rectangle(740, 0, 80, 200));
+        _model.Obstacles.Add(new Rectangle(840, 0, 80, 130));
+
+        //Нижняя пропость
+        _model.Obstacles.Add(new Rectangle(2000, 1100, 100, 500));
+        _model.Obstacles.Add(new Rectangle(1900, 1000, 80, 500));
+        _model.Obstacles.Add(new Rectangle(1800, 920, 100, 500));
+        _model.Obstacles.Add(new Rectangle(1700, 920, 100, 500));
+        _model.Obstacles.Add(new Rectangle(1600, 1100, 100, 500));
+        _model.Obstacles.Add(new Rectangle(1550, 1300, 50, 500));
+
+        // Куст
+        _model.Obstacles.Add(new Rectangle(1500, 970, 50, 50));
+
+        // Палатки
+        _model.Obstacles.Add(new Rectangle(110, 650, 150, 150));
+       _model.Obstacles.Add(new Rectangle(380, 530, 160, 140));
+
         _model.CollisionMapTexture = Content.Load<Texture2D>("collisionMap"); 
         _model.CollisionMaskWidth = _model.CollisionMapTexture.Width;
         _model.CollisionMaskHeight = _model.CollisionMapTexture.Height;
