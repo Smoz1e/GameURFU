@@ -42,13 +42,13 @@ public class GameModel
     public float BotSpeedMultiplier = 1f;
     public bool IsSettingsModalOpen = false;
     public int BotsKilled = 0;
-    public Texture2D FullHeartTexture; // Текстура сердечка для отображения рядом с полоской здоровья
+    public Texture2D FullHeartTexture; // Текстура сердечка 
     public Texture2D CrosshairTexture; // Текстура прицела
-    public Texture2D CollisionMapTexture; // Маска-коллизия (белое = препятствие)
+    public Texture2D CollisionMapTexture; // Маска-коллизия
     public Color[] CollisionMaskData; // Кэш пикселей маски-коллизии
     public int CollisionMaskWidth;
     public int CollisionMaskHeight;
     public bool IsVictory = false;
     public bool IsGameInfoModalOpen = true; // Показывать ли модальное окно смысла игры
-    public string GameInfoText = "Смысл игры: выжить и уничтожить все волны ботов. Используйте укрытия, собирайте боеприпасы и не дайте врагам приблизиться!";
+    public string GameInfoText = "Привет мой дорогой друг! Что бы спости людей от зомби, тебе предстоит выжить и уничтожить все волны атак. Используй укрытия, собирай боеприпасы и не дай зомби приблизиться к тебе!";
 }

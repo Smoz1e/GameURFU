@@ -18,8 +18,8 @@ public class BotController
     private float _lastPathfindTime = 0f;
     private float _stuckTime = 0f;
     private Vector2 _lastPosition = Vector2.Zero;
-    private const float PathfindCooldown = 0.5f;  // сек, частота пересчёта пути
-    private const float StuckThreshold = 0.3f; // сек, время за которое бот считается застрявшим 
+    private const float PathfindCooldown = 0.5f;  // частота пересчёта пути
+    private const float StuckThreshold = 0.3f; //  время за которое бот считается застрявшим 
     private const float MinMoveDist = 2f;
     private static float _cellSize = 56f; // крупнее клетка для ускорения
 
@@ -33,11 +33,11 @@ public class BotController
     {
         if (_astar == null)
         {
-            // Инициализация A* при первом апдейте (размеры экрана и делегат коллизии)
+            // Инициализация A при первом апдейте 
             _astar = new AStarPathfinder(1920, 1080, _cellSize, GameControllerStatic.IsCollisionStatic);
         }
         float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        // Проверка застревания
+
         if ((_model.Position - _lastPosition).Length() < MinMoveDist)
             _stuckTime += elapsed;
         else
@@ -54,7 +54,7 @@ public class BotController
             if (GameControllerStatic.IsCollisionStatic != null && GameControllerStatic.IsCollisionStatic(next, botRadius))
                 needPath = true;
         }
-        // Пересчёт пути только если бот застрял или путь устарел, и не чаще PathfindCooldown
+        // Пересчёт пути только если бот застрял или путь устарел не чаще PathfindCooldown
         if ((needPath && _lastPathfindTime > PathfindCooldown) || (_stuckTime > StuckThreshold && _lastPathfindTime > PathfindCooldown))
         {
             var key = (ToGridPoint(_model.Position), ToGridPoint(playerPosition));
@@ -113,7 +113,6 @@ public class BotController
         if (repelCount > 0)
         {
             repel /= repelCount;
-            // Усиливаем эффект
             repel *= 1.5f;
         }
 
@@ -143,7 +142,7 @@ public class BotController
                 _lastPathfindTime = 0f;
             }
         }
-        // Проверка столкновения для реального движения — только с botRadius
+        // Проверка столкновения для реального движения
         var newPos = _model.Position + _model.Direction * _model.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         bool collision = false;
         if (GameControllerStatic.IsCollisionStatic != null)
@@ -154,7 +153,7 @@ public class BotController
         {
             _model.Position = newPos;
         }
-        // Обновляем угол поворота
+        
         if (_model.Direction.Length() > 0)
             _model.Rotation = (float)Math.Atan2(_model.Direction.Y, _model.Direction.X);
     }
