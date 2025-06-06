@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -25,6 +26,10 @@ public class GameView
             if (model.IsSettingsModalOpen)
             {
                 DrawDifficultyModal(spriteBatch, model);
+            }
+            if (model.IsGameInfoModalOpen)
+            {
+                DrawGameInfoModal(spriteBatch, model);
             }
         }
         else if (model.CurrentState == GameState.Playing)
@@ -241,5 +246,83 @@ public class GameView
         }
         // Текст (можно заменить на отрисовку псевдотекста или добавить SpriteFont)
         // Здесь для простоты просто прямоугольники разного цвета
+    }
+
+    // Модальное окно смысла игры
+    private void DrawGameInfoModal(SpriteBatch spriteBatch, GameModel model)
+    {
+        int modalWidth = 700;
+        int modalHeight = 350;
+        int x = (spriteBatch.GraphicsDevice.Viewport.Width - modalWidth) / 2;
+        int y = (spriteBatch.GraphicsDevice.Viewport.Height - modalHeight) / 2;
+        // Полупрозрачный фон
+        spriteBatch.Draw(model.PixelTexture, new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
+        // Полупрозрачное белое окно
+        spriteBatch.Draw(model.PixelTexture, new Rectangle(x, y, modalWidth, modalHeight), Color.White * 0.92f);
+        // Текст смысла игры с переносами и более читаемым шрифтом
+        SpriteFont infoFont = model.GameTextFont ?? model.GameTextFont;
+        if (infoFont != null)
+        {
+            string info = model.GameInfoText;
+            int padding = 40;
+            int textAreaWidth = modalWidth - 2 * padding;
+            var lines = WrapText(infoFont, info, textAreaWidth);
+            float lineHeight = infoFont.LineSpacing;
+            float totalTextHeight = lines.Count * lineHeight;
+            float startY = y + 40 + (120 - totalTextHeight) / 2;
+            for (int i = 0; i < lines.Count; i++)
+            {
+                Vector2 textSize = infoFont.MeasureString(lines[i]);
+                Vector2 textPos = new Vector2(x + (modalWidth - textSize.X) / 2, startY + i * lineHeight);
+                spriteBatch.DrawString(infoFont, lines[i], textPos, Color.Black);
+            }
+        }
+        // Кнопка "Прочитал"
+        int buttonWidth = 220;
+        int buttonHeight = 60;
+        int buttonX = x + (modalWidth - buttonWidth) / 2;
+        int buttonY = y + modalHeight - buttonHeight - 30;
+        Rectangle buttonRect = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+        Color buttonColor = buttonRect.Contains(Mouse.GetState().Position) ? Color.LightGray : Color.Silver;
+        spriteBatch.Draw(model.PixelTexture, buttonRect, buttonColor * 0.92f);
+        if (infoFont != null)
+        {
+            string btnText = "Прочитал";
+            Vector2 btnSize = infoFont.MeasureString(btnText);
+            Vector2 btnPos = new Vector2(buttonX + (buttonWidth - btnSize.X) / 2, buttonY + (buttonHeight - btnSize.Y) / 2);
+            spriteBatch.DrawString(infoFont, btnText, btnPos, Color.Black);
+        }
+    }
+
+    // Вспомогательная функция для переноса текста по ширине
+    private List<string> WrapText(SpriteFont font, string text, int maxWidth)
+    {
+        var words = text.Split(' ');
+        var lines = new List<string>();
+        string currentLine = "";
+        foreach (var word in words)
+        {
+            string testLine = string.IsNullOrEmpty(currentLine) ? word : currentLine + " " + word;
+            if (font.MeasureString(testLine).X > maxWidth)
+            {
+                if (!string.IsNullOrEmpty(currentLine))
+                {
+                    lines.Add(currentLine);
+                    currentLine = word;
+                }
+                else
+                {
+                    lines.Add(word); // длинное слово
+                    currentLine = "";
+                }
+            }
+            else
+            {
+                currentLine = testLine;
+            }
+        }
+        if (!string.IsNullOrEmpty(currentLine))
+            lines.Add(currentLine);
+        return lines;
     }
 }

@@ -49,4 +49,6 @@ public class GameModel
     public int CollisionMaskWidth;
     public int CollisionMaskHeight;
     public bool IsVictory = false;
+    public bool IsGameInfoModalOpen = true; // Показывать ли модальное окно смысла игры
+    public string GameInfoText = "Смысл игры: выжить и уничтожить все волны ботов. Используйте укрытия, собирайте боеприпасы и не дайте врагам приблизиться!";
 }

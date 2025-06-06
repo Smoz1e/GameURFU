@@ -156,6 +156,10 @@ public class GameController
                     // Обработка кликов по модальному окну выбора сложности
                     HandleDifficultyModalClick(currentMouseState);
                 }
+                else if (_model.IsGameInfoModalOpen)
+                {
+                    HandleGameInfoModalClick(currentMouseState);
+                }
                 else
                 {
                     if (isStartHovered && currentMouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
@@ -374,6 +378,27 @@ public class GameController
             {
                 _model.SelectedDifficulty = DifficultyLevel.Hard;
                 _model.IsSettingsModalOpen = false;
+            }
+        }
+    }
+
+    // Обработка клика по модальному окну смысла игры
+    private void HandleGameInfoModalClick(MouseState mouseState)
+    {
+        int modalWidth = 700;
+        int modalHeight = 350;
+        int x = (_graphics.PreferredBackBufferWidth - modalWidth) / 2;
+        int y = (_graphics.PreferredBackBufferHeight - modalHeight) / 2;
+        int buttonWidth = 220;
+        int buttonHeight = 60;
+        int buttonX = x + (modalWidth - buttonWidth) / 2;
+        int buttonY = y + modalHeight - buttonHeight - 30;
+        Rectangle buttonRect = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+        if (mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
+        {
+            if (buttonRect.Contains(mouseState.Position))
+            {
+                _model.IsGameInfoModalOpen = false;
             }
         }
     }
