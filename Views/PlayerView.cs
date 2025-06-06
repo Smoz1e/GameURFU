@@ -5,8 +5,8 @@ using System;
 
 public class PlayerView
 {
-    public Texture2D _texture { get; private set; } // Изменено на public с private set
-    public Texture2D _bulletTexture { get; private set; } // Изменено на public с private set
+    public Texture2D _texture { get; private set; } 
+    public Texture2D _bulletTexture { get; private set; } 
     private float _desiredWidth;
     private float _desiredHeight;
 
@@ -25,7 +25,6 @@ public class PlayerView
         int sourceWidth = _texture.Width;
         int sourceHeight = _texture.Height;
 
-        // Отрисовка игрока
         spriteBatch.Draw(
             _texture,
             model.Position,
@@ -38,20 +37,17 @@ public class PlayerView
             0f
         );
 
-        // Временная отрисовка синего коллайдера (круга)
-        float radius = model.ColliderRadius; // Теперь радиус берется из модели
+        float radius = model.ColliderRadius; 
         int segments = 32;
         Vector2 center = model.Position;
         DrawCircle(spriteBatch, center, radius, Color.Blue * 0.7f, segments);
 
-        // Отрисовка пуль
         foreach (var bullet in model.Bullets)
         {
             bullet.Draw(spriteBatch);
         }
     }
 
-    // Вспомогательная функция для отрисовки круга
     private void DrawCircle(SpriteBatch spriteBatch, Vector2 center, float radius, Color color, int segments)
     {
         Texture2D pixel = new Texture2D(spriteBatch.GraphicsDevice, 1, 1);
@@ -67,7 +63,6 @@ public class PlayerView
         }
     }
 
-    // Вспомогательная функция для отрисовки линии
     private void DrawLine(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 end, Color color)
     {
         Vector2 edge = end - start;

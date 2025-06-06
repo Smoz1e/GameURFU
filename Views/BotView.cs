@@ -29,7 +29,7 @@ public class BotView
             0f
         );
 
-        // Отрисовка круга-коллайдера по реальному радиусу из BotModel
+        // Отрисовка круга-коллайдера
         DrawCircle(spriteBatch, model.Position, model.ColliderRadius, Color.Red * 0.3f, 32);
     }
 

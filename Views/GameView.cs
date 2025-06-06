@@ -35,21 +35,6 @@ public class GameView
         else if (model.CurrentState == GameState.Playing)
         {
             spriteBatch.Draw(model.BackgroundTexture, new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.White);
-            // Отрисовка препятствий красным цветом
-            foreach (var rect in model.Obstacles)
-            {
-                int cornerRadius = 30; // радиус скругления углов
-                // Основной прямоугольник (без углов)
-                Rectangle coreRect = new Rectangle(rect.X + cornerRadius, rect.Y, rect.Width - 2 * cornerRadius, rect.Height);
-                spriteBatch.Draw(model.PixelTexture, coreRect, Color.Red * 0.7f);
-                coreRect = new Rectangle(rect.X, rect.Y + cornerRadius, rect.Width, rect.Height - 2 * cornerRadius);
-                spriteBatch.Draw(model.PixelTexture, coreRect, Color.Red * 0.7f);
-                // 4 скругленных угла
-                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Left + cornerRadius, rect.Top + cornerRadius), cornerRadius, Color.Red * 0.7f, 180, 270);
-                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Right - cornerRadius, rect.Top + cornerRadius), cornerRadius, Color.Red * 0.7f, 270, 360);
-                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Left + cornerRadius, rect.Bottom - cornerRadius), cornerRadius, Color.Red * 0.7f, 90, 180);
-                DrawCircleQuarter(spriteBatch, model.PixelTexture, new Vector2(rect.Right - cornerRadius, rect.Bottom - cornerRadius), cornerRadius, Color.Red * 0.7f, 0, 90);
-            }
             foreach (var botModel in model.BotModels)
             {
                 botView.Draw(spriteBatch, botModel, 100f, 100f);
@@ -61,7 +46,6 @@ public class GameView
             }
             playerController.Draw(spriteBatch);
 
-            // Отрисовка полоски жизни игрока и сердечка
             int barWidth =300;
             int barHeight = 40;
             int margin = 40;
@@ -75,11 +59,11 @@ public class GameView
             // Сердечко
             if (model.PixelTexture != null && model.GameTextFont != null)
             {
-                Texture2D heartTexture = model.FullHeartTexture; // Добавим это свойство в GameModel
+                Texture2D heartTexture = model.FullHeartTexture; 
                 if (heartTexture != null)
                 {
-                    int heartSize = barHeight; // высота сердечка = высоте полоски
-                    int heartX = x - heartSize - 10; // 10px отступ слева от полоски
+                    int heartSize = barHeight; 
+                    int heartX = x - heartSize - 10; 
                     int heartY = y;
                     spriteBatch.Draw(heartTexture, new Rectangle(heartX, heartY, heartSize, heartSize), Color.White);
                 }
@@ -92,21 +76,20 @@ public class GameView
                 spriteBatch.DrawString(model.GameTextFont, hpText, textPos, Color.White);
             }
 
-            // Текстовая отрисовка волны и убитых ботов
             if (model.GameTextFont != null)
             {
                 string waveText = $"Wave: {model.CurrentWave}";
                 string killedText = $"Bots killed: {model.BotsKilled}";
                 spriteBatch.DrawString(model.GameTextFont, waveText, new Vector2(40, 40), Color.Yellow);
                 spriteBatch.DrawString(model.GameTextFont, killedText, new Vector2(40, 90), Color.Orange);
-                // Отображение оставшихся патронов
+
                 int ammoLeft = PlayerModel.MaxShotsBeforeReload - model.PlayerModel.ShotsFired;
                 string ammoText = $"Патроны: {ammoLeft}";
                 spriteBatch.DrawString(model.GameTextFont, ammoText, new Vector2(40, 140), Color.White);
-                // Отображение количества магазинов
+
                 string magText = $"Магазины: {model.PlayerModel.Magazines}";
                 spriteBatch.DrawString(model.GameTextFont, magText, new Vector2(40, 180), Color.LightBlue);
-                // Надпись по центру экрана при перезарядке
+
                 if (model.PlayerModel.IsReloading)
                 {
                     string reloadText = "Перезаряжаюсь";
@@ -117,7 +100,7 @@ public class GameView
                     );
                     spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
                 }
-                // Сообщение о победе
+
                 if (model.IsVictory)
                 {
                     string victoryText = "Вы победили!";
@@ -130,21 +113,17 @@ public class GameView
                 }
             }
 
-            // Текстовая отрисовка волны и убитых ботов
             if (model.GameTextFont != null)
             {
                 string waveText = $"Wave: {model.CurrentWave}";
                 string killedText = $"Bots killed: {model.BotsKilled}";
                 spriteBatch.DrawString(model.GameTextFont, waveText, new Vector2(40, 40), Color.Yellow);
                 spriteBatch.DrawString(model.GameTextFont, killedText, new Vector2(40, 90), Color.Orange);
-                // Отображение оставшихся патронов
                 int ammoLeft = PlayerModel.MaxShotsBeforeReload - model.PlayerModel.ShotsFired;
                 string ammoText = $"Патроны: {ammoLeft}";
                 spriteBatch.DrawString(model.GameTextFont, ammoText, new Vector2(40, 140), Color.White);
-                // Отображение количества магазинов
                 string magText = $"Магазины: {model.PlayerModel.Magazines}";
                 spriteBatch.DrawString(model.GameTextFont, magText, new Vector2(40, 180), Color.LightBlue);
-                // Надпись по центру экрана при перезарядке
                 if (model.PlayerModel.IsReloading)
                 {
                     string reloadText = "Перезаряжаюсь";
@@ -155,7 +134,6 @@ public class GameView
                     );
                     spriteBatch.DrawString(model.GameTextFont, reloadText, centerPos, Color.Red);
                 }
-                // Сообщение о победе
                 if (model.IsVictory)
                 {
                     string victoryText = "Вы победили!";
@@ -168,7 +146,6 @@ public class GameView
                 }
             }
 
-            // Отрисовка прицела вместо курсора
             if (model.CrosshairTexture != null)
             {
                 var mouseState = Microsoft.Xna.Framework.Input.Mouse.GetState();
@@ -181,7 +158,6 @@ public class GameView
         spriteBatch.End();
     }
 
-    // Отрисовка четверти круга (для скругленных углов)
     private void DrawCircleQuarter(SpriteBatch spriteBatch, Texture2D pixel, Vector2 center, int radius, Color color, float startAngleDeg, float endAngleDeg)
     {
         int segments = 8;
@@ -198,7 +174,6 @@ public class GameView
         }
     }
 
-    // Вспомогательная функция для отрисовки линии
     private void DrawLine(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 end, Color color)
     {
         Vector2 edge = end - start;
@@ -206,18 +181,14 @@ public class GameView
         spriteBatch.Draw(texture, new Rectangle((int)start.X, (int)start.Y, (int)edge.Length(), 2), null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
     }
 
-    // Модальное окно выбора сложности
     private void DrawDifficultyModal(SpriteBatch spriteBatch, GameModel model)
     {
         int modalWidth = 500;
         int modalHeight = 350;
         int x = (spriteBatch.GraphicsDevice.Viewport.Width - modalWidth) / 2;
         int y = (spriteBatch.GraphicsDevice.Viewport.Height - modalHeight) / 2;
-        // Полупрозрачный фон
         spriteBatch.Draw(model.PixelTexture, new Rectangle(0, 0, spriteBatch.GraphicsDevice.Viewport.Width, spriteBatch.GraphicsDevice.Viewport.Height), Color.Black * 0.5f);
-        // Белое окно
         spriteBatch.Draw(model.PixelTexture, new Rectangle(x, y, modalWidth, modalHeight), Color.White);
-        // Кнопки
         int buttonWidth = 400;
         int buttonHeight = 70;
         int spacing = 20;
@@ -230,10 +201,8 @@ public class GameView
         spriteBatch.Draw(model.PixelTexture, easyRect, easyColor);
         spriteBatch.Draw(model.PixelTexture, mediumRect, mediumColor);
         spriteBatch.Draw(model.PixelTexture, hardRect, hardColor);
-        // Надписи уровней сложности с новым шрифтом
         if (model.TextMenuFont != null)
         {
-            // Центрирование текста по кнопке
             Vector2 easySize = model.TextMenuFont.MeasureString("Easy");
             Vector2 mediumSize = model.TextMenuFont.MeasureString("Medium");
             Vector2 hardSize = model.TextMenuFont.MeasureString("Hard");
@@ -244,8 +213,6 @@ public class GameView
             spriteBatch.DrawString(model.TextMenuFont, "Medium", mediumPos, Color.Black);
             spriteBatch.DrawString(model.TextMenuFont, "Hard", hardPos, Color.Black);
         }
-        // Текст (можно заменить на отрисовку псевдотекста или добавить SpriteFont)
-        // Здесь для простоты просто прямоугольники разного цвета
     }
 
     // Модальное окно смысла игры
@@ -312,7 +279,7 @@ public class GameView
                 }
                 else
                 {
-                    lines.Add(word); // длинное слово
+                    lines.Add(word);
                     currentLine = "";
                 }
             }

@@ -77,47 +77,14 @@ public class GameController
             buttonHeight
         );
 
-        // Создание 1x1 пиксельной текстуры для отрисовки препятствий
-        _model.PixelTexture = new Texture2D(_graphics.GraphicsDevice, 1, 1);
-        _model.PixelTexture.SetData(new[] { Color.White });
-
-        // Пример препятствий для теста (можно редактировать координаты и размеры)
-        _model.Obstacles.Add(new Rectangle(0, 0, 100, 650));
-        _model.Obstacles.Add(new Rectangle(100, 100, 100, 500));
-        _model.Obstacles.Add(new Rectangle(200, 100, 80, 470));
-        _model.Obstacles.Add(new Rectangle(300, 100, 120, 450));
-        _model.Obstacles.Add(new Rectangle(400, 100, 80, 320));
-        _model.Obstacles.Add(new Rectangle(480, 100, 60, 270));
-        _model.Obstacles.Add(new Rectangle(540, 100, 60, 200));
-        _model.Obstacles.Add(new Rectangle(540, 100, 60, 200));
-        _model.Obstacles.Add(new Rectangle(640, 100, 100, 150));
-        _model.Obstacles.Add(new Rectangle(740, 0, 80, 200));
-        _model.Obstacles.Add(new Rectangle(840, 0, 80, 130));
-
-        //Нижняя пропость
-        _model.Obstacles.Add(new Rectangle(2000, 1100, 100, 500));
-        _model.Obstacles.Add(new Rectangle(1900, 1000, 80, 500));
-        _model.Obstacles.Add(new Rectangle(1800, 920, 100, 500));
-        _model.Obstacles.Add(new Rectangle(1700, 920, 100, 500));
-        _model.Obstacles.Add(new Rectangle(1600, 1100, 100, 500));
-        _model.Obstacles.Add(new Rectangle(1550, 1300, 50, 500));
-
-        // Куст
-        _model.Obstacles.Add(new Rectangle(1500, 970, 50, 50));
-
-        // Палатки
-        _model.Obstacles.Add(new Rectangle(110, 650, 150, 150));
-       _model.Obstacles.Add(new Rectangle(380, 530, 160, 140));
-
-        _model.CollisionMapTexture = Content.Load<Texture2D>("collisionMap"); // PNG с белыми препятствиями
+        _model.CollisionMapTexture = Content.Load<Texture2D>("collisionMap"); 
         _model.CollisionMaskWidth = _model.CollisionMapTexture.Width;
         _model.CollisionMaskHeight = _model.CollisionMapTexture.Height;
         _model.CollisionMaskData = new Color[_model.CollisionMaskWidth * _model.CollisionMaskHeight];
         _model.CollisionMapTexture.GetData(_model.CollisionMaskData);
-        _model.Obstacles.Clear(); // Удаляем старые препятствия
+        _model.Obstacles.Clear(); 
     }
 
-    // Проверка пересечения круга и прямоугольника
     private bool CircleIntersectsRectangle(Vector2 circleCenter, float radius, Rectangle rect)
     {
         float closestX = MathHelper.Clamp(circleCenter.X, rect.Left, rect.Right);
@@ -129,7 +96,6 @@ public class GameController
 
     public void Update(GameTime gameTime)
     {
-        // Управление состояниями игры
         var keyboardState = Keyboard.GetState();
         var gamePadState = GamePad.GetState(PlayerIndex.One);
         MouseState currentMouseState = Mouse.GetState();
@@ -153,7 +119,6 @@ public class GameController
 
                 if (_model.IsSettingsModalOpen)
                 {
-                    // Обработка кликов по модальному окну выбора сложности
                     HandleDifficultyModalClick(currentMouseState);
                 }
                 else if (_model.IsGameInfoModalOpen)
@@ -183,7 +148,6 @@ public class GameController
                 }
                 break;
             case GameState.Playing:
-                // Адаптивный радиус коллизии для игрока и ботов
                 float baseScreenHeight = 1080f;
                 float scale = _graphics.PreferredBackBufferHeight / baseScreenHeight;
                 _model.PlayerModel.ColliderRadius = 25f * scale;
@@ -198,7 +162,6 @@ public class GameController
                     var botController = _model.BotControllers[i];
                     botController.Update(gameTime, _model.PlayerModel.Position, _model.BotModels.ToArray(), _model.SpaceBetweenBots, _model.Obstacles);
 
-                    // Проверка столкновения игрока с ботом (по кругам)
                     float dist = Vector2.Distance(_model.PlayerModel.Position, _model.BotModels[i].Position);
                     float sumRadius = _model.PlayerModel.ColliderRadius + _model.BotModels[i].ColliderRadius;
                     if (dist < sumRadius)
@@ -209,28 +172,24 @@ public class GameController
                             _model.CurrentState = GameState.Menu;
                         }
                     }
-                    // Проверка столкновения пуль с ботами (по кругам)
                     for (int j = _model.PlayerModel.Bullets.Count - 1; j >= 0; j--)
                     {
                         var bullet = _model.PlayerModel.Bullets[j];
-                        float bulletRadius = 7.5f; // радиус пули (можно вынести в модель)
+                        float bulletRadius = 7.5f; 
                         float botRadius = _model.BotModels[i].ColliderRadius;
                         float distBullet = Vector2.Distance(bullet.Position, _model.BotModels[i].Position);
                         if (distBullet < bulletRadius + botRadius)
                         {
-                            // Спавн боеприпаса с шансом (1-3 за волну)
                             TrySpawnAmmunition(_model.BotModels[i].Position);
                             _model.BotControllers.RemoveAt(i);
                             _model.BotModels.RemoveAt(i);
                             _model.PlayerModel.Bullets.RemoveAt(j);
                             _model.BotsKilled++;
-                            // Если это был последний бот в волне, доспавнить недостающие боеприпасы
                             if (_model.BotControllers.Count == 0 && _ammoSpawnedThisWave < _ammoToSpawnThisWave)
                             {
                                 int toSpawn = _ammoToSpawnThisWave - _ammoSpawnedThisWave;
                                 for (int k = 0; k < toSpawn; k++)
                                 {
-                                    // Спавним боеприпас в случайной позиции на экране
                                     Vector2 spawnPos = new Vector2(
                                         _rnd.Next(60, _graphics.PreferredBackBufferWidth - 60),
                                         _rnd.Next(60, _graphics.PreferredBackBufferHeight - 60)
@@ -242,7 +201,6 @@ public class GameController
                         }
                     }
                 }
-                // Проверка на новую волну
                 if (_model.BotControllers.Count == 0)
                 {
                     if (_model.CurrentWave >= 7)
@@ -262,6 +220,17 @@ public class GameController
                 }
                 break;
         }
+
+        if (_model.IsVictory)
+        {
+
+            if (Keyboard.GetState().GetPressedKeys().Length > 0 || Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
+                ResetGameState(); 
+                _model.CurrentState = GameState.Menu; 
+            }
+        }
+
         _previousMouseState = currentMouseState;
     }
 
@@ -276,7 +245,6 @@ public class GameController
     private int _ammoToSpawnThisWave = 0;
     private int _ammoSpawnedThisWave = 0;
 
-    // Новый метод для форсированного спавна боеприпаса (без проверки лимита)
     private void TryForceSpawnAmmunition(Vector2 pos)
     {
         var ammo = new AmmunitionModel(pos);
@@ -285,7 +253,6 @@ public class GameController
         _ammoSpawnedThisWave++;
     }
 
-    // Исправленный TrySpawnAmmunition (без инициализации лимита)
     private void TrySpawnAmmunition(Vector2 pos)
     {
         if (_ammoSpawnedThisWave < _ammoToSpawnThisWave)
@@ -349,7 +316,6 @@ public class GameController
         }
     }
 
-    // Обработка клика по модальному окну выбора сложности
     private void HandleDifficultyModalClick(MouseState mouseState)
     {
         int modalWidth = 500;
@@ -382,7 +348,6 @@ public class GameController
         }
     }
 
-    // Обработка клика по модальному окну смысла игры
     private void HandleGameInfoModalClick(MouseState mouseState)
     {
         int modalWidth = 700;
@@ -425,32 +390,28 @@ public class GameController
         }
     }
 
-    // Сброс состояния игры при старте новой игры
     private void ResetGameState()
     {
         SetDifficultyParams();
         _model.CurrentWave = 1;
         _model.BotsInWave = 1;
-        _model.BotsKilled = 0; // Сброс счетчика убитых ботов
-        // Сброс игрока
+        _model.BotsKilled = 0; 
         _model.PlayerModel.Position = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
         _model.PlayerModel.Rotation = 0f;
         _model.PlayerModel.Bullets.Clear();
-        _model.PlayerModel.Magazines = 4; // стартовое значение
+        _model.PlayerModel.Magazines = 4; 
         _model.PlayerModel.ShotsFired = 0;
         _model.PlayerModel.IsReloading = false;
         _model.PlayerModel.ReloadTimer = 0f;
         _model.PlayerModel.Health = PlayerModel.MaxHealth;
         _model.PlayerModel.IsDead = false;
         _ammoSpawnedThisWave = 0;
-        _model.IsVictory = false; // Сброс флага победы
-        // Сброс ботов
+        _model.IsVictory = false; 
         _model.BotModels.Clear();
         _model.BotControllers.Clear();
         SpawnBotWave(_model.BotsInWave);
     }
 
-    // Проверка подбора боеприпасов игроком
     private void CheckAmmunitionPickup()
     {
         int pickedUp = 0;
@@ -470,7 +431,6 @@ public class GameController
         }
     }
 
-    // Проверка: можно ли пройти/спавниться в данной точке (или круге) по маске-коллизии (оптимизировано)
     private bool IsCollision(Vector2 pos, float radius = 0)
     {
         if (_model.CollisionMaskData == null) return false;
@@ -484,7 +444,6 @@ public class GameController
             var c = _model.CollisionMaskData[py * w + px];
             return c.R > 200 && c.G > 200 && c.B > 200;
         }
-        // Проверка круга (по маске)
         int rPix = (int)(radius / _graphics.PreferredBackBufferWidth * w);
         for (int dx = -rPix; dx <= rPix; dx++)
         for (int dy = -rPix; dy <= rPix; dy++)

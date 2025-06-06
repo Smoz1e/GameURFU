@@ -23,7 +23,6 @@ public class PlayerController
         var kstate = Keyboard.GetState();
         var mouseState = Mouse.GetState();
 
-        // Управление игроком
         Vector2 movement = Vector2.Zero;
         if (kstate.IsKeyDown(Keys.Up) || kstate.IsKeyDown(Keys.W)) movement.Y -= 1;
         if (kstate.IsKeyDown(Keys.Down) || kstate.IsKeyDown(Keys.S)) movement.Y += 1;
@@ -35,7 +34,6 @@ public class PlayerController
         {
             movement.Normalize();
             Vector2 newPos = _model.Position + movement * updatedSpeed;
-            // Проверка по маске-коллизии
             bool collided = false;
             if (GameControllerStatic.IsCollisionStatic != null)
             {
@@ -47,15 +45,12 @@ public class PlayerController
             }
         }
 
-        // Ограничение движения игрока в пределах экрана
         ClampPosition(graphics);
 
-        // Вычисление угла поворота к курсору
         Vector2 mousePosition = new Vector2(mouseState.X, mouseState.Y);
         Vector2 directionToMouse = mousePosition - _model.Position;
         _model.Rotation = (float)Math.Atan2(directionToMouse.Y, directionToMouse.X);
 
-        // Перезарядка
         if (_model.IsReloading)
         {
             _model.ReloadTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -70,24 +65,20 @@ public class PlayerController
                 }
                 else
                 {
-                    // Если магазинов нет, просто завершаем перезарядку, но патроны не пополняем
                     _model.IsReloading = false;
                     _model.ReloadTimer = 0f;
                 }
             }
         }
 
-        // Принудительная перезарядка по клавише R
         if (!_model.IsReloading && kstate.IsKeyDown(Keys.R) && _model.Magazines > 0 && _model.ShotsFired > 0)
         {
             _model.IsReloading = true;
             _model.ReloadTimer = 0f;
         }
 
-        // Стрельба
         if (!_model.IsReloading && mouseState.LeftButton == ButtonState.Pressed && _previousMouseState.LeftButton == ButtonState.Released)
         {
-            // Проверяем, есть ли патроны (ShotsFired < MaxShotsBeforeReload) и хотя бы 1 магазин
             if (_model.ShotsFired < PlayerModel.MaxShotsBeforeReload && (_model.Magazines > 0 || _model.ShotsFired < PlayerModel.MaxShotsBeforeReload))
             {
                 Vector2 bulletDirection = directionToMouse;
@@ -96,7 +87,6 @@ public class PlayerController
                     bulletDirection.Normalize();
                 }
 
-                // Смещение дула относительно центра игрока (например, вправо на 40 пикселей)
                 Vector2 gunOffset = new Vector2(30, 10); // подберите значение под вашу модель
                 Vector2 rotatedOffset = Vector2.Transform(gunOffset, Matrix.CreateRotationZ(_model.Rotation));
                 Vector2 bulletStart = _model.Position + rotatedOffset;
@@ -114,10 +104,8 @@ public class PlayerController
                         _model.IsReloading = true;
                         _model.ReloadTimer = 0f;
                     }
-                    // Если магазинов нет, не перезаряжаем, игрок не может стрелять
                 }
             }
-            // Если патронов нет, не стреляем и не уходим в минус
         }
 
         // Обновление пуль
@@ -143,7 +131,6 @@ public class PlayerController
         );
     }
 
-    // Проверка пересечения круга и прямоугольника
     private bool CircleIntersectsRectangle(Vector2 circleCenter, float radius, Rectangle rect)
     {
         float closestX = MathHelper.Clamp(circleCenter.X, rect.Left, rect.Right);

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("The_War_of__Layers")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+92e74ef4327de8e7072c03a5e665f4c50d070267")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7dc1de72560aba892b0021870b025111f3079920")]
 [assembly: System.Reflection.AssemblyProductAttribute("The_War_of__Layers")]
 [assembly: System.Reflection.AssemblyTitleAttribute("The_War_of__Layers")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
